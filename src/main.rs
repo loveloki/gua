@@ -1,8 +1,10 @@
+mod app_menus;
 mod ba_gua;
 
 use ba_gua::BaGuaCalculator;
 use gpui::*;
 use gpui_component::{
+    button::*,
     input::{InputEvent, InputState, TextInput},
     *,
 };
@@ -90,6 +92,12 @@ impl Render for NumberInput {
             .p_2()
             .v_flex()
             .gap_2()
+            .child(
+                Button::new("quit")
+                    .primary()
+                    .label("退出")
+                    .on_click(|_, _, cx| cx.quit()),
+            )
             .child(TextInput::new(&self.input1_state))
             .child(TextInput::new(&self.input2_state))
             .child(self.display_text.clone())
@@ -102,6 +110,8 @@ fn main() {
     app.run(move |cx| {
         // This must be called before using any GPUI Component features.
         gpui_component::init(cx);
+
+        app_menus::init("简单的八卦计算器", cx);
 
         cx.spawn(async move |cx| {
             cx.open_window(WindowOptions::default(), |window, cx| {
