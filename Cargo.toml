@@ -1,9 +1,15 @@
 [package]
-name = "fortune-telling"
+name = "bagua"
 version = "0.1.0"
 edition = "2024"
+repository = "https://github.com/loveloki/bagua"
 
 [dependencies]
 anyhow = "1.0.100"
 gpui = "0.2.2"
 gpui-component = "0.3.1"
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"

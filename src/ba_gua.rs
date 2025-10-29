@@ -13,19 +13,6 @@ pub enum BaGua {
 }
 
 impl BaGua {
-    pub fn number(&self) -> u8 {
-        match self {
-            BaGua::Qian => 1,
-            BaGua::Dui => 2,
-            BaGua::Li => 3,
-            BaGua::Zhen => 4,
-            BaGua::Xun => 5,
-            BaGua::Kan => 6,
-            BaGua::Gen => 7,
-            BaGua::Kun => 8,
-        }
-    }
-
     pub fn name(&self) -> &'static str {
         match self {
             BaGua::Qian => "乾",
