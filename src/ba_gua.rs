@@ -9,7 +9,7 @@ pub enum BaGua {
     Xun = 5,
     Kan = 6,
     Gen = 7,
-    Kun = 8,
+    Kun = 0,
 }
 
 impl BaGua {
@@ -36,7 +36,7 @@ impl BaGua {
             5 => Some(BaGua::Xun),
             6 => Some(BaGua::Kan),
             7 => Some(BaGua::Gen),
-            8 => Some(BaGua::Kun),
+            0 => Some(BaGua::Kun),
             _ => None,
         }
     }
@@ -50,9 +50,9 @@ pub struct BaGuaItem {
 
 impl BaGuaItem {
     pub fn display(&self) -> SharedString {
-        let one = self.one.clone().map_or("无效", |g| g.name());
-        let two = self.two.clone().map_or("无效", |g| g.name());
-        let three = self.three.clone().map_or("无效", |g| g.name());
+        let one = self.one.clone().unwrap().name();
+        let two = self.two.clone().unwrap().name();
+        let three = self.three.clone().unwrap().name();
 
         format!("结果为：上卦 {}, 下卦 {}，动爻 {}", one, two, three).into()
     }
