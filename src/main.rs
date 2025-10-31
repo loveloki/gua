@@ -1,13 +1,13 @@
 mod app_menus;
-mod ba_gua;
+mod gua;
 
-use ba_gua::BaGuaCalculator;
 use gpui::*;
 use gpui_component::{
     button::*,
     input::{InputEvent, InputState, TextInput},
     *,
 };
+use gua::ba_gua::BaGuaCalculator;
 
 pub struct MainWindow {
     number_input: Entity<NumberInput>,

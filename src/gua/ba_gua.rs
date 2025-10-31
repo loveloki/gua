@@ -26,7 +26,7 @@ impl BaGua {
         }
     }
 
-    /// 根据数字计算八卦 (1-8 对应乾到坤)
+    /// 根据数字计算八卦
     pub fn from_number(num: u8) -> Option<Self> {
         match num {
             1 => Some(BaGua::Qian),
