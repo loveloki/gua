@@ -2,41 +2,65 @@ use crate::SharedString;
 
 #[derive(Debug, Clone)]
 pub enum BaGua {
-    Qian = 1,
-    Dui = 2,
-    Li = 3,
-    Zhen = 4,
-    Xun = 5,
-    Kan = 6,
-    Gen = 7,
-    Kun = 0,
+    /**
+     * 乾
+     */
+    Qián = 1,
+    /**
+     * 兑
+     */
+    Duì = 2,
+    /**
+     * 离
+     */
+    Lí = 3,
+    /**
+     * 震
+     */
+    Zhèn = 4,
+    /**
+     * 巽
+     */
+    Xùn = 5,
+    /**
+     * 坎
+     */
+    Kǎn = 6,
+    /**
+     * 艮
+     */
+    Gèn = 7,
+    /**
+     * 坤
+     */
+    Kūn = 0,
 }
 
 impl BaGua {
     pub fn name(&self) -> &'static str {
         match self {
-            BaGua::Qian => "乾",
-            BaGua::Dui => "兑",
-            BaGua::Li => "离",
-            BaGua::Zhen => "震",
-            BaGua::Xun => "巽",
-            BaGua::Kan => "坎",
-            BaGua::Gen => "艮",
-            BaGua::Kun => "坤",
+            BaGua::Qián => "乾",
+            BaGua::Duì => "兑",
+            BaGua::Lí => "离",
+            BaGua::Zhèn => "震",
+            BaGua::Xùn => "巽",
+            BaGua::Kǎn => "坎",
+            BaGua::Gèn => "艮",
+            BaGua::Kūn => "坤",
         }
     }
 
     /// 根据数字计算八卦
     pub fn from_number(num: u8) -> Option<Self> {
         match num {
-            1 => Some(BaGua::Qian),
-            2 => Some(BaGua::Dui),
-            3 => Some(BaGua::Li),
-            4 => Some(BaGua::Zhen),
-            5 => Some(BaGua::Xun),
-            6 => Some(BaGua::Kan),
-            7 => Some(BaGua::Gen),
-            0 => Some(BaGua::Kun),
+            1 => Some(BaGua::Qián),
+            2 => Some(BaGua::Duì),
+            3 => Some(BaGua::Lí),
+            4 => Some(BaGua::Zhèn),
+            5 => Some(BaGua::Xùn),
+            6 => Some(BaGua::Kǎn),
+            7 => Some(BaGua::Gèn),
+            0 => Some(BaGua::Kūn),
             _ => None,
         }
     }
