@@ -1,9 +1,8 @@
 use std::{fmt::Debug, time::SystemTime};
 
-use crate::{
-    SharedString,
-    gua::basic::{Gua8, Gua64},
-};
+use gpui::SharedString;
+
+use crate::gua::basic::{Gua8, Gua64};
 
 /// 卦象计算器
 #[derive(Debug)]
