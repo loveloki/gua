@@ -28,14 +28,9 @@ impl Gua8 {
     const ZHÈN: Gua8 = Gua8(Yao::YIN, Yao::YIN, Yao::YANG);
 
     /**
-     * 坤
+     * 巽
      */
-    const KŪN: Gua8 = Gua8(Yao::YIN, Yao::YIN, Yao::YIN);
-
-    /**
-     * 艮
-     */
-    const GÈN: Gua8 = Gua8(Yao::YANG, Yao::YIN, Yao::YIN);
+    const XÙN: Gua8 = Gua8(Yao::YANG, Yao::YANG, Yao::YIN);
 
     /**
      * 坎
@@ -43,9 +38,14 @@ impl Gua8 {
     const KǍN: Gua8 = Gua8(Yao::YIN, Yao::YANG, Yao::YIN);
 
     /**
-     * 巽
+     * 艮
      */
-    const XÙN: Gua8 = Gua8(Yao::YANG, Yao::YANG, Yao::YIN);
+    const GÈN: Gua8 = Gua8(Yao::YANG, Yao::YIN, Yao::YIN);
+
+    /**
+     * 坤
+     */
+    const KŪN: Gua8 = Gua8(Yao::YIN, Yao::YIN, Yao::YIN);
 
     /**
      * 解析，返回 BaGua
@@ -57,8 +57,8 @@ impl Gua8 {
             (Yao::YANG, Yao::YIN, Yao::YANG) => SharedString::new("离"),
             (Yao::YIN, Yao::YIN, Yao::YANG) => SharedString::new("震"),
             (Yao::YANG, Yao::YANG, Yao::YIN) => SharedString::new("巽"),
-            (Yao::YANG, Yao::YIN, Yao::YIN) => SharedString::new("艮"),
             (Yao::YIN, Yao::YANG, Yao::YIN) => SharedString::new("坎"),
+            (Yao::YANG, Yao::YIN, Yao::YIN) => SharedString::new("艮"),
             (Yao::YIN, Yao::YIN, Yao::YIN) => SharedString::new("坤"),
         };
 
@@ -67,7 +67,7 @@ impl Gua8 {
 
     /**
      * 解析数字，返回 BaGua
-     * 便于取余计算，所以巽用的是 0 而不是 8
+     * 便于取余计算，所以坤用的是 0 而不是 8
      */
     pub fn from_num(num: u8) -> Self {
         let result = match num {
@@ -75,10 +75,10 @@ impl Gua8 {
             2 => Gua8::DUÌ,
             3 => Gua8::LÍ,
             4 => Gua8::ZHÈN,
-            5 => Gua8::KŪN,
-            6 => Gua8::GÈN,
-            7 => Gua8::KǍN,
-            0 => Gua8::XÙN,
+            5 => Gua8::XÙN,
+            6 => Gua8::KǍN,
+            7 => Gua8::GÈN,
+            0 => Gua8::KŪN,
             _ => !unreachable!(),
         };
 
