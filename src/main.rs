@@ -43,8 +43,8 @@ impl NumberInput {
 
             move |this, _, ev: &InputEvent, _window, cx| match ev {
                 InputEvent::Change => {
-                    let value1: u8 = input1_state.read(cx).value().parse().unwrap_or(0);
-                    let value2: u8 = input2_state.read(cx).value().parse().unwrap_or(0);
+                    let value1: u16 = input1_state.read(cx).value().parse().unwrap_or(0);
+                    let value2: u16 = input2_state.read(cx).value().parse().unwrap_or(0);
 
                     let ba_gua_result = BaGuaCalculator::calculate_from_two_numbers(value1, value2);
 
@@ -62,8 +62,8 @@ impl NumberInput {
 
             move |this, _, ev: &InputEvent, _window, cx| match ev {
                 InputEvent::Change => {
-                    let value1: u8 = input1_state.read(cx).value().parse().unwrap_or(0);
-                    let value2: u8 = input2_state.read(cx).value().parse().unwrap_or(0);
+                    let value1: u16 = input1_state.read(cx).value().parse().unwrap_or(0);
+                    let value2: u16 = input2_state.read(cx).value().parse().unwrap_or(0);
 
                     let ba_gua_result = BaGuaCalculator::calculate_from_two_numbers(value1, value2);
 

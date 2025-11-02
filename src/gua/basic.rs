@@ -507,7 +507,13 @@ impl Gua64 {
     }
 
     pub fn display(&self) -> SharedString {
-        self.name.clone()
+        let shang = self.shang.name();
+        let xia = self.xia.name();
+        let name = self.name.clone();
+
+        let display = format!("{}（上卦：{}，下卦：{}）", name, shang, xia);
+
+        SharedString::new(display)
     }
 
     /**
