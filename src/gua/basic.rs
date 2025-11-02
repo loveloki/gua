@@ -7,51 +7,59 @@ use super::yao::*;
  * 三个爻为一个卦，共有八个，即八卦
  */
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
-pub struct Gua8(pub Yao, pub Yao, pub Yao);
+pub struct Gua8 {
+    pub yao1: Yao,
+    pub yao2: Yao,
+    pub yao3: Yao,
+}
 
 impl Gua8 {
     /**
      * 乾
      */
-    const QIÁN: Gua8 = Gua8(Yao::YANG, Yao::YANG, Yao::YANG);
+    const QIÁN: Gua8 = Gua8::new(Yao::YANG, Yao::YANG, Yao::YANG);
     /**
      * 兑
      */
-    const DUÌ: Gua8 = Gua8(Yao::YIN, Yao::YANG, Yao::YANG);
+    const DUÌ: Gua8 = Gua8::new(Yao::YIN, Yao::YANG, Yao::YANG);
     /**
      * 离
      */
-    const LÍ: Gua8 = Gua8(Yao::YANG, Yao::YIN, Yao::YANG);
+    const LÍ: Gua8 = Gua8::new(Yao::YANG, Yao::YIN, Yao::YANG);
     /**
      * 震
      */
-    const ZHÈN: Gua8 = Gua8(Yao::YIN, Yao::YIN, Yao::YANG);
+    const ZHÈN: Gua8 = Gua8::new(Yao::YIN, Yao::YIN, Yao::YANG);
 
     /**
      * 巽
      */
-    const XÙN: Gua8 = Gua8(Yao::YANG, Yao::YANG, Yao::YIN);
+    const XÙN: Gua8 = Gua8::new(Yao::YANG, Yao::YANG, Yao::YIN);
 
     /**
      * 坎
      */
-    const KǍN: Gua8 = Gua8(Yao::YIN, Yao::YANG, Yao::YIN);
+    const KǍN: Gua8 = Gua8::new(Yao::YIN, Yao::YANG, Yao::YIN);
 
     /**
      * 艮
      */
-    const GÈN: Gua8 = Gua8(Yao::YANG, Yao::YIN, Yao::YIN);
+    const GÈN: Gua8 = Gua8::new(Yao::YANG, Yao::YIN, Yao::YIN);
 
     /**
      * 坤
      */
-    const KŪN: Gua8 = Gua8(Yao::YIN, Yao::YIN, Yao::YIN);
+    const KŪN: Gua8 = Gua8::new(Yao::YIN, Yao::YIN, Yao::YIN);
+
+    pub const fn new(yao1: Yao, yao2: Yao, yao3: Yao) -> Self {
+        Self { yao1, yao2, yao3 }
+    }
 
     /**
      * 解析，返回 BaGua
      */
     pub fn name(&self) -> SharedString {
-        let name = match (self.0, self.1, self.2) {
+        let name = match (self.yao1, self.yao2, self.yao3) {
             (Yao::YANG, Yao::YANG, Yao::YANG) => SharedString::new("乾"),
             (Yao::YIN, Yao::YANG, Yao::YANG) => SharedString::new("兑"),
             (Yao::YANG, Yao::YIN, Yao::YANG) => SharedString::new("离"),
@@ -90,9 +98,9 @@ impl Gua8 {
      */
     pub fn reverse(&mut self, index: u8) {
         match index {
-            0 => self.0.reverse(),
-            1 => self.1.reverse(),
-            2 => self.2.reverse(),
+            0 => self.yao1.reverse(),
+            1 => self.yao2.reverse(),
+            2 => self.yao3.reverse(),
             _ => !unreachable!(),
         }
     }
