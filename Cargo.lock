@@ -449,15 +449,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bagua"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "gpui",
- "gpui-component",
-]
-
-[[package]]
 name = "base62"
 version = "2.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2375,6 +2366,15 @@ name = "grid"
 version = "0.18.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "12101ecc8225ea6d675bc70263074eab6169079621c2186fe0c66590b2df9681"
+
+[[package]]
+name = "gua"
+version = "0.1.1"
+dependencies = [
+ "anyhow",
+ "gpui",
+ "gpui-component",
+]
 
 [[package]]
 name = "h2"
