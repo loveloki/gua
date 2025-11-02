@@ -536,3 +536,49 @@ impl Gua64 {
         self.name = Self::name(self.shang, self.xia);
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::{Gua8, Gua64, Yao};
+
+    #[test]
+    /**
+     * gua8 变卦功能测试
+     */
+    fn test_gua8_change() {
+        let mut gua = Gua8::new(Yao::YANG, Yao::YANG, Yao::YANG);
+
+        // 乾卦
+        assert_eq!(gua, Gua8::QIÁN);
+
+        // 兑卦
+        gua.reverse(0);
+        assert_eq!(gua, Gua8::DUÌ);
+
+        // 震卦
+        gua.reverse(1);
+        assert_eq!(gua, Gua8::ZHÈN);
+
+        // 坤卦
+        gua.reverse(2);
+        assert_eq!(gua, Gua8::KŪN);
+
+        // 艮卦
+        gua.reverse(0);
+        assert_eq!(gua, Gua8::GÈN);
+
+        // 巽卦
+        gua.reverse(1);
+        assert_eq!(gua, Gua8::XÙN);
+
+        // 坎卦
+        gua.reverse(0);
+        assert_eq!(gua, Gua8::KǍN);
+
+        // 离卦
+        gua.reverse(0);
+        gua.reverse(1);
+        gua.reverse(2);
+        assert_eq!(gua, Gua8::LÍ);
+    }
+}
