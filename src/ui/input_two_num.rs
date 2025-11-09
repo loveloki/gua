@@ -10,17 +10,43 @@ use gpui_component::{
 
 use crate::gua::ba_gua::BaGuaCalculator;
 
+pub struct InputTwoNumPanel {
+    content: Entity<InputTwoNumContent>,
+}
+
+impl InputTwoNumPanel {
+    pub fn view(window: &mut Window, cx: &mut App) -> Entity<Self> {
+        cx.new(|cx| Self::new(window, cx))
+    }
+
+    fn new(window: &mut Window, cx: &mut Context<Self>) -> Self {
+        let content = InputTwoNumContent::view(window, cx);
+
+        Self { content }
+    }
+}
+
+impl Render for InputTwoNumPanel {
+    fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+        div()
+            .flex()
+            .size_full()
+            .items_center()
+            .justify_center()
+            .child(self.content.clone())
+    }
+}
+
 /**
  * 输入两个数字来计算卦象
  */
-
-pub struct InputTwoNum {
+pub struct InputTwoNumContent {
     input1_state: Entity<InputState>,
     input2_state: Entity<InputState>,
     result_text: SharedString, // 八卦的结果
 }
 
-impl InputTwoNum {
+impl InputTwoNumContent {
     pub fn view(window: &mut Window, cx: &mut App) -> Entity<Self> {
         cx.new(|cx| Self::new(window, cx))
     }
@@ -48,7 +74,7 @@ impl InputTwoNum {
     }
 }
 
-impl Render for InputTwoNum {
+impl Render for InputTwoNumContent {
     fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let entity = cx.entity();
         div()
@@ -73,7 +99,8 @@ impl Render for InputTwoNum {
                     .on_click(move |_, _, cx| {
                         cx.update_entity(
                             &entity,
-                            |input: &mut InputTwoNum, context: &mut Context<InputTwoNum>| {
+                            |input: &mut InputTwoNumContent,
+                             context: &mut Context<InputTwoNumContent>| {
                                 input.calc_result(context)
                             },
                         );
