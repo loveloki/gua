@@ -8,7 +8,7 @@ use gpui_component::{
     input::{InputState, TextInput},
 };
 
-use crate::gua::ba_gua::BaGuaCalculator;
+use crate::{gua::ba_gua::BaGuaCalculator, state::global::GlobalState};
 
 pub struct InputTwoNumPanel {
     content: Entity<InputTwoNumContent>,
@@ -27,7 +27,7 @@ impl InputTwoNumPanel {
 }
 
 impl Render for InputTwoNumPanel {
-    fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
         div()
             .flex()
             .size_full()
@@ -43,7 +43,6 @@ impl Render for InputTwoNumPanel {
 pub struct InputTwoNumContent {
     input1_state: Entity<InputState>,
     input2_state: Entity<InputState>,
-    result_text: SharedString, // 八卦的结果
 }
 
 impl InputTwoNumContent {
@@ -57,7 +56,11 @@ impl InputTwoNumContent {
 
         let ba_gua_result = BaGuaCalculator::calculate_from_two_numbers(value1, value2);
 
-        self.result_text = ba_gua_result.display();
+        let gua_result = GlobalState::state_mut(cx);
+
+        gua_result.result = Some(ba_gua_result);
+
+        // self.result_text = ba_gua_result.display();
 
         cx.notify();
     }
@@ -69,7 +72,6 @@ impl InputTwoNumContent {
         Self {
             input1_state,
             input2_state,
-            result_text: SharedString::default(),
         }
     }
 }
@@ -91,7 +93,6 @@ impl Render for InputTwoNumContent {
             )
             .child(TextInput::new(&self.input1_state))
             .child(TextInput::new(&self.input2_state))
-            .child(self.result_text.clone())
             .child(
                 Button::new("calc")
                     .label("开始计算")

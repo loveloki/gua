@@ -1,10 +1,11 @@
 use gpui::{AppContext, Application, WindowOptions};
 use gpui_component::Root;
 
-use crate::ui::home::HomeWindow;
+use crate::{state::global::GlobalState, ui::home::HomeWindow};
 
 mod app_menus;
 mod gua;
+mod state;
 mod ui;
 
 fn main() {
@@ -13,6 +14,7 @@ fn main() {
     app.run(move |cx| {
         // This must be called before using any GPUI Component features.
         gpui_component::init(cx);
+        GlobalState::init(cx);
 
         app_menus::init("简单的八卦计算器", cx);
 

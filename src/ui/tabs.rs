@@ -4,6 +4,7 @@ use gpui_component::{
     v_flex,
 };
 
+use super::result::ResultPanel;
 use crate::ui::input_two_num::InputTwoNumPanel;
 
 /**
@@ -21,6 +22,7 @@ enum DisplayWindow {
 pub struct Tabs {
     active_tab: usize,
     input_two_num_panel: Entity<InputTwoNumPanel>,
+    result_panel: Entity<ResultPanel>,
 }
 
 impl Tabs {
@@ -30,10 +32,12 @@ impl Tabs {
 
     fn new(window: &mut Window, cx: &mut Context<Self>) -> Self {
         let input_two_num_panel = InputTwoNumPanel::view(window, cx);
+        let result_panel = ResultPanel::view(window, cx);
 
         Self {
             active_tab: 0,
             input_two_num_panel,
+            result_panel,
         }
     }
 
@@ -41,7 +45,7 @@ impl Tabs {
         match self.active_tab {
             0 => div().child("主页"),
             1 => div().child(self.input_two_num_panel.clone()),
-            2 => div().child("Result content"),
+            2 => div().child(self.result_panel.clone()),
             _ => div(),
         }
     }

@@ -35,9 +35,19 @@ impl BaGuaCalculator {
 /**
  * 算卦结果
  */
+#[derive(Clone)]
 pub struct GuaResult {
+    /**
+     * 本卦
+     */
     pub ben_gua: Gua64,
+    /**
+     * 变卦
+     */
     pub bian_gua: Gua64,
+    /**
+     * 算卦时间
+     */
     pub date: SystemTime,
 }
 
