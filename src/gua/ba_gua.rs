@@ -1,6 +1,7 @@
-use std::{fmt::Debug, time::SystemTime};
+use std::fmt::Debug;
 
 use gpui::{Context, IntoElement, ParentElement, Render, SharedString, Window, div};
+use time::{OffsetDateTime, macros::format_description};
 
 use crate::gua::basic::{Gua8, Gua64};
 
@@ -48,12 +49,12 @@ pub struct GuaResult {
     /**
      * 算卦时间
      */
-    pub date: SystemTime,
+    pub date: OffsetDateTime,
 }
 
 impl GuaResult {
     pub fn new(ben_gua: Gua64, bian_gua: Gua64) -> Self {
-        let date = SystemTime::now();
+        let date = OffsetDateTime::now_local().unwrap();
 
         GuaResult {
             date,
@@ -66,7 +67,16 @@ impl GuaResult {
         let ben_gua = self.ben_gua.display();
         let bian_gua = self.bian_gua.display();
 
-        format!("本卦：{}\n变卦：{}", ben_gua, bian_gua).into()
+        let custom_format = format_description!(
+            "[year] 年 [month padding:zero] 月 [day padding:zero] 日 [hour padding:zero] 时 [minute padding:zero] 分"
+        );
+        let parsed_date = self.date.format(custom_format).unwrap();
+
+        format!(
+            "本卦：{}\n变卦：{}\n 算卦时间：{}",
+            ben_gua, bian_gua, parsed_date
+        )
+        .into()
     }
 }
 
