@@ -17,39 +17,39 @@ impl Gua8 {
     /**
      * 乾
      */
-    const QIÁN: Gua8 = Gua8::new(Yao::YANG, Yao::YANG, Yao::YANG);
+    const 乾: Gua8 = Gua8::new(Yao::阳, Yao::阳, Yao::阳);
     /**
      * 兑
      */
-    const DUÌ: Gua8 = Gua8::new(Yao::YIN, Yao::YANG, Yao::YANG);
+    const 兑: Gua8 = Gua8::new(Yao::阴, Yao::阳, Yao::阳);
     /**
      * 离
      */
-    const LÍ: Gua8 = Gua8::new(Yao::YANG, Yao::YIN, Yao::YANG);
+    const 离: Gua8 = Gua8::new(Yao::阳, Yao::阴, Yao::阳);
     /**
      * 震
      */
-    const ZHÈN: Gua8 = Gua8::new(Yao::YIN, Yao::YIN, Yao::YANG);
+    const 震: Gua8 = Gua8::new(Yao::阴, Yao::阴, Yao::阳);
 
     /**
      * 巽
      */
-    const XÙN: Gua8 = Gua8::new(Yao::YANG, Yao::YANG, Yao::YIN);
+    const 巽: Gua8 = Gua8::new(Yao::阳, Yao::阳, Yao::阴);
 
     /**
      * 坎
      */
-    const KǍN: Gua8 = Gua8::new(Yao::YIN, Yao::YANG, Yao::YIN);
+    const 坎: Gua8 = Gua8::new(Yao::阴, Yao::阳, Yao::阴);
 
     /**
      * 艮
      */
-    const GÈN: Gua8 = Gua8::new(Yao::YANG, Yao::YIN, Yao::YIN);
+    const 艮: Gua8 = Gua8::new(Yao::阳, Yao::阴, Yao::阴);
 
     /**
      * 坤
      */
-    const KŪN: Gua8 = Gua8::new(Yao::YIN, Yao::YIN, Yao::YIN);
+    const 坤: Gua8 = Gua8::new(Yao::阴, Yao::阴, Yao::阴);
 
     pub const fn new(yao1: Yao, yao2: Yao, yao3: Yao) -> Self {
         Self { yao1, yao2, yao3 }
@@ -60,14 +60,14 @@ impl Gua8 {
      */
     pub fn name(&self) -> SharedString {
         let name = match (self.yao1, self.yao2, self.yao3) {
-            (Yao::YANG, Yao::YANG, Yao::YANG) => SharedString::new("乾"),
-            (Yao::YIN, Yao::YANG, Yao::YANG) => SharedString::new("兑"),
-            (Yao::YANG, Yao::YIN, Yao::YANG) => SharedString::new("离"),
-            (Yao::YIN, Yao::YIN, Yao::YANG) => SharedString::new("震"),
-            (Yao::YANG, Yao::YANG, Yao::YIN) => SharedString::new("巽"),
-            (Yao::YIN, Yao::YANG, Yao::YIN) => SharedString::new("坎"),
-            (Yao::YANG, Yao::YIN, Yao::YIN) => SharedString::new("艮"),
-            (Yao::YIN, Yao::YIN, Yao::YIN) => SharedString::new("坤"),
+            (Yao::阳, Yao::阳, Yao::阳) => SharedString::new("乾"),
+            (Yao::阴, Yao::阳, Yao::阳) => SharedString::new("兑"),
+            (Yao::阳, Yao::阴, Yao::阳) => SharedString::new("离"),
+            (Yao::阴, Yao::阴, Yao::阳) => SharedString::new("震"),
+            (Yao::阳, Yao::阳, Yao::阴) => SharedString::new("巽"),
+            (Yao::阴, Yao::阳, Yao::阴) => SharedString::new("坎"),
+            (Yao::阳, Yao::阴, Yao::阴) => SharedString::new("艮"),
+            (Yao::阴, Yao::阴, Yao::阴) => SharedString::new("坤"),
         };
 
         name
@@ -79,14 +79,14 @@ impl Gua8 {
      */
     pub fn from_num(num: u8) -> Self {
         let result = match num {
-            1 => Gua8::QIÁN,
-            2 => Gua8::DUÌ,
-            3 => Gua8::LÍ,
-            4 => Gua8::ZHÈN,
-            5 => Gua8::XÙN,
-            6 => Gua8::KǍN,
-            7 => Gua8::GÈN,
-            0 => Gua8::KŪN,
+            1 => Gua8::乾,
+            2 => Gua8::兑,
+            3 => Gua8::离,
+            4 => Gua8::震,
+            5 => Gua8::巽,
+            6 => Gua8::坎,
+            7 => Gua8::艮,
+            0 => Gua8::坤,
             _ => !unreachable!(),
         };
 
@@ -121,320 +121,320 @@ impl Gua64 {
     /**
      * 乾
      */
-    const QIÁN: Gua64 = Gua64::new(Gua8::QIÁN, Gua8::QIÁN);
+    const 乾: Gua64 = Gua64::new(Gua8::乾, Gua8::乾);
     /**
      * 坤
      */
-    const KŪN: Gua64 = Gua64::new(Gua8::KŪN, Gua8::KŪN);
+    const 坤: Gua64 = Gua64::new(Gua8::坤, Gua8::坤);
     /**
      * 屯
      */
-    const ZHŪN: Gua64 = Gua64::new(Gua8::KǍN, Gua8::ZHÈN);
+    const 屯: Gua64 = Gua64::new(Gua8::坎, Gua8::震);
 
     /**
      * 蒙
      */
-    const MÉNG: Gua64 = Gua64::new(Gua8::GÈN, Gua8::KǍN);
+    const 蒙: Gua64 = Gua64::new(Gua8::艮, Gua8::坎);
 
     /**
      * 需
      */
-    const XŪ: Gua64 = Gua64::new(Gua8::KǍN, Gua8::QIÁN);
+    const 需: Gua64 = Gua64::new(Gua8::坎, Gua8::乾);
 
     /**
      * 讼
      */
-    const SÒNG: Gua64 = Gua64::new(Gua8::QIÁN, Gua8::KǍN);
+    const 讼: Gua64 = Gua64::new(Gua8::乾, Gua8::坎);
 
     /**
      * 师
      */
-    const SHĪ: Gua64 = Gua64::new(Gua8::KŪN, Gua8::KǍN);
+    const 师: Gua64 = Gua64::new(Gua8::坤, Gua8::坎);
 
     /**
      * 比
      */
-    const BǏ: Gua64 = Gua64::new(Gua8::KǍN, Gua8::KŪN);
+    const 比: Gua64 = Gua64::new(Gua8::坎, Gua8::坤);
 
     /**
      * 小畜
      */
-    const XIǍO_CHÙ: Gua64 = Gua64::new(Gua8::XÙN, Gua8::QIÁN);
+    const 小畜: Gua64 = Gua64::new(Gua8::巽, Gua8::乾);
 
     /**
      * 履
      */
-    const LǙ: Gua64 = Gua64::new(Gua8::QIÁN, Gua8::DUÌ);
+    const 履: Gua64 = Gua64::new(Gua8::乾, Gua8::兑);
 
     /**
      * 泰
      */
-    const TÀI: Gua64 = Gua64::new(Gua8::KŪN, Gua8::QIÁN);
+    const 泰: Gua64 = Gua64::new(Gua8::坤, Gua8::乾);
 
     /**
      * 否
      */
-    const PǏ: Gua64 = Gua64::new(Gua8::QIÁN, Gua8::KŪN);
+    const 否: Gua64 = Gua64::new(Gua8::乾, Gua8::坤);
 
     /**
      * 同人
      */
-    const TÓNG_RÉN: Gua64 = Gua64::new(Gua8::QIÁN, Gua8::LÍ);
+    const 同人: Gua64 = Gua64::new(Gua8::乾, Gua8::离);
 
     /**
      * 大有
      */
-    const DÀ_YǑU: Gua64 = Gua64::new(Gua8::LÍ, Gua8::QIÁN);
+    const 大有: Gua64 = Gua64::new(Gua8::离, Gua8::乾);
 
     /**
      * 谦
      */
-    const QIĀN: Gua64 = Gua64::new(Gua8::KŪN, Gua8::GÈN);
+    const 谦: Gua64 = Gua64::new(Gua8::坤, Gua8::艮);
 
     /**
      * 豫
      */
-    const YÙ: Gua64 = Gua64::new(Gua8::ZHÈN, Gua8::KŪN);
+    const 豫: Gua64 = Gua64::new(Gua8::震, Gua8::坤);
 
     /**
      * 随
      */
-    const SUÍ: Gua64 = Gua64::new(Gua8::DUÌ, Gua8::ZHÈN);
+    const 随: Gua64 = Gua64::new(Gua8::兑, Gua8::震);
 
     /**
      * 蛊
      */
-    const GǓ: Gua64 = Gua64::new(Gua8::GÈN, Gua8::XÙN);
+    const 蛊: Gua64 = Gua64::new(Gua8::艮, Gua8::巽);
 
     /**
      * 临
      */
-    const LÍN: Gua64 = Gua64::new(Gua8::KŪN, Gua8::DUÌ);
+    const 临: Gua64 = Gua64::new(Gua8::坤, Gua8::兑);
 
     /**
      * 观
      */
-    const GUĀN: Gua64 = Gua64::new(Gua8::XÙN, Gua8::KŪN);
+    const 观: Gua64 = Gua64::new(Gua8::巽, Gua8::坤);
 
     /**
      * 噬嗑
      */
-    const SHÌ_HÉ: Gua64 = Gua64::new(Gua8::LÍ, Gua8::ZHÈN);
+    const 噬嗑: Gua64 = Gua64::new(Gua8::离, Gua8::震);
 
     /**
      * 贲
      */
-    const BÌ: Gua64 = Gua64::new(Gua8::GÈN, Gua8::LÍ);
+    const 贲: Gua64 = Gua64::new(Gua8::艮, Gua8::离);
 
     /**
      * 剥
      */
-    const BŌ: Gua64 = Gua64::new(Gua8::GÈN, Gua8::KŪN);
+    const 剥: Gua64 = Gua64::new(Gua8::艮, Gua8::坤);
 
     /**
      * 复
      */
-    const FÙ: Gua64 = Gua64::new(Gua8::KŪN, Gua8::ZHÈN);
+    const 复: Gua64 = Gua64::new(Gua8::坤, Gua8::震);
 
     /**
      * 无妄
      */
-    const WÚ_WÀNG: Gua64 = Gua64::new(Gua8::QIÁN, Gua8::ZHÈN);
+    const 无妄: Gua64 = Gua64::new(Gua8::乾, Gua8::震);
 
     /**
      * 大畜
      */
-    const DÀ_CHÙ: Gua64 = Gua64::new(Gua8::GÈN, Gua8::QIÁN);
+    const 大畜: Gua64 = Gua64::new(Gua8::艮, Gua8::乾);
 
     /**
      * 颐
      */
-    const YÍ: Gua64 = Gua64::new(Gua8::GÈN, Gua8::ZHÈN);
+    const 颐: Gua64 = Gua64::new(Gua8::艮, Gua8::震);
 
     /**
      * 大过
      */
-    const DÀ_GUÒ: Gua64 = Gua64::new(Gua8::DUÌ, Gua8::XÙN);
+    const 大过: Gua64 = Gua64::new(Gua8::兑, Gua8::巽);
 
     /**
      * 坎
      */
-    const KǍN: Gua64 = Gua64::new(Gua8::KǍN, Gua8::KǍN);
+    const 坎: Gua64 = Gua64::new(Gua8::坎, Gua8::坎);
 
     /**
      * 离
      */
-    const LÍ: Gua64 = Gua64::new(Gua8::LÍ, Gua8::LÍ);
+    const 离: Gua64 = Gua64::new(Gua8::离, Gua8::离);
 
     /**
      * 咸
      */
-    const XIÁN: Gua64 = Gua64::new(Gua8::DUÌ, Gua8::GÈN);
+    const 咸: Gua64 = Gua64::new(Gua8::兑, Gua8::艮);
 
     /**
      * 恒
      */
-    const HÉNG: Gua64 = Gua64::new(Gua8::ZHÈN, Gua8::XÙN);
+    const 恒: Gua64 = Gua64::new(Gua8::震, Gua8::巽);
 
     /**
      * 遯
      */
-    const DÙN: Gua64 = Gua64::new(Gua8::QIÁN, Gua8::GÈN);
+    const 遯: Gua64 = Gua64::new(Gua8::乾, Gua8::艮);
 
     /**
      * 大壮
      */
-    const DÀ_ZHUÀNG: Gua64 = Gua64::new(Gua8::ZHÈN, Gua8::QIÁN);
+    const 大壮: Gua64 = Gua64::new(Gua8::震, Gua8::乾);
 
     /**
      * 晋
      */
-    const JÌN: Gua64 = Gua64::new(Gua8::LÍ, Gua8::KŪN);
+    const 晋: Gua64 = Gua64::new(Gua8::离, Gua8::坤);
 
     /**
      * 明夷
      */
-    const MÍNG_YÍ: Gua64 = Gua64::new(Gua8::KŪN, Gua8::LÍ);
+    const 明夷: Gua64 = Gua64::new(Gua8::坤, Gua8::离);
 
     /**
      * 家人
      */
-    const JIĀ_RÉN: Gua64 = Gua64::new(Gua8::XÙN, Gua8::LÍ);
+    const 家人: Gua64 = Gua64::new(Gua8::巽, Gua8::离);
 
     /**
      * 睽
      */
-    const KUÍ: Gua64 = Gua64::new(Gua8::LÍ, Gua8::DUÌ);
+    const 睽: Gua64 = Gua64::new(Gua8::离, Gua8::兑);
 
     /**
      * 蹇
      */
-    const JIǍN: Gua64 = Gua64::new(Gua8::KǍN, Gua8::GÈN);
+    const 蹇: Gua64 = Gua64::new(Gua8::坎, Gua8::艮);
 
     /**
      * 解
      */
-    const XIÈ: Gua64 = Gua64::new(Gua8::ZHÈN, Gua8::KǍN);
+    const 解: Gua64 = Gua64::new(Gua8::震, Gua8::坎);
 
     /**
      * 损
      */
-    const SǓN: Gua64 = Gua64::new(Gua8::GÈN, Gua8::DUÌ);
+    const 损: Gua64 = Gua64::new(Gua8::艮, Gua8::兑);
 
     /**
      * 益
      */
-    const YÌ: Gua64 = Gua64::new(Gua8::XÙN, Gua8::ZHÈN);
+    const 益: Gua64 = Gua64::new(Gua8::巽, Gua8::震);
 
     /**
      * 夬
      */
-    const GUÀI: Gua64 = Gua64::new(Gua8::DUÌ, Gua8::QIÁN);
+    const 夬: Gua64 = Gua64::new(Gua8::兑, Gua8::乾);
 
     /**
      * 姤
      */
-    const GÒU: Gua64 = Gua64::new(Gua8::QIÁN, Gua8::XÙN);
+    const 姤: Gua64 = Gua64::new(Gua8::乾, Gua8::巽);
 
     /**
      * 萃
      */
-    const CUÌ: Gua64 = Gua64::new(Gua8::DUÌ, Gua8::KŪN);
+    const 萃: Gua64 = Gua64::new(Gua8::兑, Gua8::坤);
 
     /**
      * 升
      */
-    const SHĒNG: Gua64 = Gua64::new(Gua8::KŪN, Gua8::XÙN);
+    const 升: Gua64 = Gua64::new(Gua8::坤, Gua8::巽);
 
     /**
      * 困
      */
-    const KÙN: Gua64 = Gua64::new(Gua8::DUÌ, Gua8::KǍN);
+    const 困: Gua64 = Gua64::new(Gua8::兑, Gua8::坎);
 
     /**
      * 井
      */
-    const JǏNG: Gua64 = Gua64::new(Gua8::KǍN, Gua8::XÙN);
+    const 井: Gua64 = Gua64::new(Gua8::坎, Gua8::巽);
 
     /**
      * 革
      */
-    const GÉ: Gua64 = Gua64::new(Gua8::DUÌ, Gua8::LÍ);
+    const 革: Gua64 = Gua64::new(Gua8::兑, Gua8::离);
 
     /**
      * 鼎
      */
-    const DǏNG: Gua64 = Gua64::new(Gua8::LÍ, Gua8::XÙN);
+    const 鼎: Gua64 = Gua64::new(Gua8::离, Gua8::巽);
 
     /**
      * 震
      */
-    const ZHÈN: Gua64 = Gua64::new(Gua8::ZHÈN, Gua8::ZHÈN);
+    const 震: Gua64 = Gua64::new(Gua8::震, Gua8::震);
 
     /**
      * 艮
      */
-    const GÈN: Gua64 = Gua64::new(Gua8::GÈN, Gua8::GÈN);
+    const 艮: Gua64 = Gua64::new(Gua8::艮, Gua8::艮);
 
     /**
      * 渐
      */
-    const JIÀN: Gua64 = Gua64::new(Gua8::XÙN, Gua8::GÈN);
+    const 渐: Gua64 = Gua64::new(Gua8::巽, Gua8::艮);
 
     /**
      * 归妹
      */
-    const GUĪ_MÈI: Gua64 = Gua64::new(Gua8::ZHÈN, Gua8::DUÌ);
+    const 归妹: Gua64 = Gua64::new(Gua8::震, Gua8::兑);
 
     /**
      * 丰
      */
-    const FĒNG: Gua64 = Gua64::new(Gua8::ZHÈN, Gua8::LÍ);
+    const 丰: Gua64 = Gua64::new(Gua8::震, Gua8::离);
 
     /**
      * 旅
      */
-    const LǙ_56: Gua64 = Gua64::new(Gua8::LÍ, Gua8::GÈN);
+    const 旅: Gua64 = Gua64::new(Gua8::离, Gua8::艮);
 
     /**
      * 巽
      */
-    const XÙN: Gua64 = Gua64::new(Gua8::XÙN, Gua8::XÙN);
+    const 巽: Gua64 = Gua64::new(Gua8::巽, Gua8::巽);
 
     /**
      * 兑
      */
-    const DUÌ: Gua64 = Gua64::new(Gua8::DUÌ, Gua8::DUÌ);
+    const 兑: Gua64 = Gua64::new(Gua8::兑, Gua8::兑);
 
     /**
      * 涣
      */
-    const HUÀN: Gua64 = Gua64::new(Gua8::XÙN, Gua8::KǍN);
+    const 涣: Gua64 = Gua64::new(Gua8::巽, Gua8::坎);
 
     /**
      * 节
      */
-    const JIÉ: Gua64 = Gua64::new(Gua8::KǍN, Gua8::DUÌ);
+    const 节: Gua64 = Gua64::new(Gua8::坎, Gua8::兑);
 
     /**
      * 中孚
      */
-    const ZHŌNG_FÚ: Gua64 = Gua64::new(Gua8::XÙN, Gua8::DUÌ);
+    const 中孚: Gua64 = Gua64::new(Gua8::巽, Gua8::兑);
 
     /**
      * 小过
      */
-    const XIǍO_GUÒ: Gua64 = Gua64::new(Gua8::ZHÈN, Gua8::GÈN);
+    const 小过: Gua64 = Gua64::new(Gua8::震, Gua8::艮);
 
     /**
      * 既济
      */
-    const JÌ_JÌ: Gua64 = Gua64::new(Gua8::KǍN, Gua8::LÍ);
+    const 既济: Gua64 = Gua64::new(Gua8::坎, Gua8::离);
 
     /**
      * 未济
      */
-    const WÈI_JÌ: Gua64 = Gua64::new(Gua8::LÍ, Gua8::KǍN);
+    const 未济: Gua64 = Gua64::new(Gua8::离, Gua8::坎);
 
     pub const fn new(shang: Gua8, xia: Gua8) -> Self {
         let name = Self::name(shang, xia);
@@ -447,70 +447,70 @@ impl Gua64 {
      */
     pub const fn name(shang: Gua8, xia: Gua8) -> SharedString {
         match (shang, xia) {
-            (Gua8::QIÁN, Gua8::QIÁN) => SharedString::new_static("乾"),
-            (Gua8::KŪN, Gua8::KŪN) => SharedString::new_static("坤"),
-            (Gua8::KǍN, Gua8::ZHÈN) => SharedString::new_static("屯"),
-            (Gua8::GÈN, Gua8::KǍN) => SharedString::new_static("蒙"),
-            (Gua8::KǍN, Gua8::QIÁN) => SharedString::new_static("需"),
-            (Gua8::QIÁN, Gua8::KǍN) => SharedString::new_static("讼"),
-            (Gua8::KŪN, Gua8::KǍN) => SharedString::new_static("师"),
-            (Gua8::KǍN, Gua8::KŪN) => SharedString::new_static("比"),
-            (Gua8::XÙN, Gua8::QIÁN) => SharedString::new_static("小畜"),
-            (Gua8::QIÁN, Gua8::DUÌ) => SharedString::new_static("履"),
-            (Gua8::KŪN, Gua8::QIÁN) => SharedString::new_static("泰"),
-            (Gua8::QIÁN, Gua8::KŪN) => SharedString::new_static("否"),
-            (Gua8::QIÁN, Gua8::LÍ) => SharedString::new_static("同人"),
-            (Gua8::LÍ, Gua8::QIÁN) => SharedString::new_static("大有"),
-            (Gua8::KŪN, Gua8::GÈN) => SharedString::new_static("谦"),
-            (Gua8::ZHÈN, Gua8::KŪN) => SharedString::new_static("豫"),
-            (Gua8::DUÌ, Gua8::ZHÈN) => SharedString::new_static("随"),
-            (Gua8::GÈN, Gua8::XÙN) => SharedString::new_static("蛊"),
-            (Gua8::KŪN, Gua8::DUÌ) => SharedString::new_static("临"),
-            (Gua8::XÙN, Gua8::KŪN) => SharedString::new_static("观"),
-            (Gua8::LÍ, Gua8::ZHÈN) => SharedString::new_static("噬嗑"),
-            (Gua8::GÈN, Gua8::LÍ) => SharedString::new_static("贲"),
-            (Gua8::GÈN, Gua8::KŪN) => SharedString::new_static("剥"),
-            (Gua8::KŪN, Gua8::ZHÈN) => SharedString::new_static("复"),
-            (Gua8::QIÁN, Gua8::ZHÈN) => SharedString::new_static("无妄"),
-            (Gua8::GÈN, Gua8::QIÁN) => SharedString::new_static("大畜"),
-            (Gua8::GÈN, Gua8::ZHÈN) => SharedString::new_static("颐"),
-            (Gua8::DUÌ, Gua8::XÙN) => SharedString::new_static("大过"),
-            (Gua8::KǍN, Gua8::KǍN) => SharedString::new_static("坎"),
-            (Gua8::LÍ, Gua8::LÍ) => SharedString::new_static("离"),
-            (Gua8::DUÌ, Gua8::GÈN) => SharedString::new_static("咸"),
-            (Gua8::ZHÈN, Gua8::XÙN) => SharedString::new_static("恒"),
-            (Gua8::QIÁN, Gua8::GÈN) => SharedString::new_static("遯"),
-            (Gua8::ZHÈN, Gua8::QIÁN) => SharedString::new_static("大壮"),
-            (Gua8::LÍ, Gua8::KŪN) => SharedString::new_static("晋"),
-            (Gua8::KŪN, Gua8::LÍ) => SharedString::new_static("明夷"),
-            (Gua8::XÙN, Gua8::LÍ) => SharedString::new_static("家人"),
-            (Gua8::LÍ, Gua8::DUÌ) => SharedString::new_static("睽"),
-            (Gua8::KǍN, Gua8::GÈN) => SharedString::new_static("蹇"),
-            (Gua8::ZHÈN, Gua8::KǍN) => SharedString::new_static("解"),
-            (Gua8::GÈN, Gua8::DUÌ) => SharedString::new_static("损"),
-            (Gua8::XÙN, Gua8::ZHÈN) => SharedString::new_static("益"),
-            (Gua8::DUÌ, Gua8::QIÁN) => SharedString::new_static("夬"),
-            (Gua8::QIÁN, Gua8::XÙN) => SharedString::new_static("姤"),
-            (Gua8::DUÌ, Gua8::KŪN) => SharedString::new_static("萃"),
-            (Gua8::KŪN, Gua8::XÙN) => SharedString::new_static("升"),
-            (Gua8::DUÌ, Gua8::KǍN) => SharedString::new_static("困"),
-            (Gua8::KǍN, Gua8::XÙN) => SharedString::new_static("井"),
-            (Gua8::DUÌ, Gua8::LÍ) => SharedString::new_static("革"),
-            (Gua8::LÍ, Gua8::XÙN) => SharedString::new_static("鼎"),
-            (Gua8::ZHÈN, Gua8::ZHÈN) => SharedString::new_static("震"),
-            (Gua8::GÈN, Gua8::GÈN) => SharedString::new_static("艮"),
-            (Gua8::XÙN, Gua8::GÈN) => SharedString::new_static("渐"),
-            (Gua8::ZHÈN, Gua8::DUÌ) => SharedString::new_static("归妹"),
-            (Gua8::ZHÈN, Gua8::LÍ) => SharedString::new_static("丰"),
-            (Gua8::LÍ, Gua8::GÈN) => SharedString::new_static("旅"),
-            (Gua8::XÙN, Gua8::XÙN) => SharedString::new_static("巽"),
-            (Gua8::DUÌ, Gua8::DUÌ) => SharedString::new_static("兑"),
-            (Gua8::XÙN, Gua8::KǍN) => SharedString::new_static("涣"),
-            (Gua8::KǍN, Gua8::DUÌ) => SharedString::new_static("节"),
-            (Gua8::XÙN, Gua8::DUÌ) => SharedString::new_static("中孚"),
-            (Gua8::ZHÈN, Gua8::GÈN) => SharedString::new_static("小过"),
-            (Gua8::KǍN, Gua8::LÍ) => SharedString::new_static("既济"),
-            (Gua8::LÍ, Gua8::KǍN) => SharedString::new_static("未济"),
+            (Gua8::乾, Gua8::乾) => SharedString::new_static("乾"),
+            (Gua8::坤, Gua8::坤) => SharedString::new_static("坤"),
+            (Gua8::坎, Gua8::震) => SharedString::new_static("屯"),
+            (Gua8::艮, Gua8::坎) => SharedString::new_static("蒙"),
+            (Gua8::坎, Gua8::乾) => SharedString::new_static("需"),
+            (Gua8::乾, Gua8::坎) => SharedString::new_static("讼"),
+            (Gua8::坤, Gua8::坎) => SharedString::new_static("师"),
+            (Gua8::坎, Gua8::坤) => SharedString::new_static("比"),
+            (Gua8::巽, Gua8::乾) => SharedString::new_static("小畜"),
+            (Gua8::乾, Gua8::兑) => SharedString::new_static("履"),
+            (Gua8::坤, Gua8::乾) => SharedString::new_static("泰"),
+            (Gua8::乾, Gua8::坤) => SharedString::new_static("否"),
+            (Gua8::乾, Gua8::离) => SharedString::new_static("同人"),
+            (Gua8::离, Gua8::乾) => SharedString::new_static("大有"),
+            (Gua8::坤, Gua8::艮) => SharedString::new_static("谦"),
+            (Gua8::震, Gua8::坤) => SharedString::new_static("豫"),
+            (Gua8::兑, Gua8::震) => SharedString::new_static("随"),
+            (Gua8::艮, Gua8::巽) => SharedString::new_static("蛊"),
+            (Gua8::坤, Gua8::兑) => SharedString::new_static("临"),
+            (Gua8::巽, Gua8::坤) => SharedString::new_static("观"),
+            (Gua8::离, Gua8::震) => SharedString::new_static("噬嗑"),
+            (Gua8::艮, Gua8::离) => SharedString::new_static("贲"),
+            (Gua8::艮, Gua8::坤) => SharedString::new_static("剥"),
+            (Gua8::坤, Gua8::震) => SharedString::new_static("复"),
+            (Gua8::乾, Gua8::震) => SharedString::new_static("无妄"),
+            (Gua8::艮, Gua8::乾) => SharedString::new_static("大畜"),
+            (Gua8::艮, Gua8::震) => SharedString::new_static("颐"),
+            (Gua8::兑, Gua8::巽) => SharedString::new_static("大过"),
+            (Gua8::坎, Gua8::坎) => SharedString::new_static("坎"),
+            (Gua8::离, Gua8::离) => SharedString::new_static("离"),
+            (Gua8::兑, Gua8::艮) => SharedString::new_static("咸"),
+            (Gua8::震, Gua8::巽) => SharedString::new_static("恒"),
+            (Gua8::乾, Gua8::艮) => SharedString::new_static("遯"),
+            (Gua8::震, Gua8::乾) => SharedString::new_static("大壮"),
+            (Gua8::离, Gua8::坤) => SharedString::new_static("晋"),
+            (Gua8::坤, Gua8::离) => SharedString::new_static("明夷"),
+            (Gua8::巽, Gua8::离) => SharedString::new_static("家人"),
+            (Gua8::离, Gua8::兑) => SharedString::new_static("睽"),
+            (Gua8::坎, Gua8::艮) => SharedString::new_static("蹇"),
+            (Gua8::震, Gua8::坎) => SharedString::new_static("解"),
+            (Gua8::艮, Gua8::兑) => SharedString::new_static("损"),
+            (Gua8::巽, Gua8::震) => SharedString::new_static("益"),
+            (Gua8::兑, Gua8::乾) => SharedString::new_static("夬"),
+            (Gua8::乾, Gua8::巽) => SharedString::new_static("姤"),
+            (Gua8::兑, Gua8::坤) => SharedString::new_static("萃"),
+            (Gua8::坤, Gua8::巽) => SharedString::new_static("升"),
+            (Gua8::兑, Gua8::坎) => SharedString::new_static("困"),
+            (Gua8::坎, Gua8::巽) => SharedString::new_static("井"),
+            (Gua8::兑, Gua8::离) => SharedString::new_static("革"),
+            (Gua8::离, Gua8::巽) => SharedString::new_static("鼎"),
+            (Gua8::震, Gua8::震) => SharedString::new_static("震"),
+            (Gua8::艮, Gua8::艮) => SharedString::new_static("艮"),
+            (Gua8::巽, Gua8::艮) => SharedString::new_static("渐"),
+            (Gua8::震, Gua8::兑) => SharedString::new_static("归妹"),
+            (Gua8::震, Gua8::离) => SharedString::new_static("丰"),
+            (Gua8::离, Gua8::艮) => SharedString::new_static("旅"),
+            (Gua8::巽, Gua8::巽) => SharedString::new_static("巽"),
+            (Gua8::兑, Gua8::兑) => SharedString::new_static("兑"),
+            (Gua8::巽, Gua8::坎) => SharedString::new_static("涣"),
+            (Gua8::坎, Gua8::兑) => SharedString::new_static("节"),
+            (Gua8::巽, Gua8::兑) => SharedString::new_static("中孚"),
+            (Gua8::震, Gua8::艮) => SharedString::new_static("小过"),
+            (Gua8::坎, Gua8::离) => SharedString::new_static("既济"),
+            (Gua8::离, Gua8::坎) => SharedString::new_static("未济"),
         }
     }
 
@@ -546,39 +546,39 @@ mod tests {
      * gua8 变卦功能测试
      */
     fn test_gua8_change() {
-        let mut gua = Gua8::new(Yao::YANG, Yao::YANG, Yao::YANG);
+        let mut gua = Gua8::new(Yao::阳, Yao::阳, Yao::阳);
 
         // 乾卦
-        assert_eq!(gua, Gua8::QIÁN);
+        assert_eq!(gua, Gua8::乾);
 
         // 兑卦
         gua.reverse(0);
-        assert_eq!(gua, Gua8::DUÌ);
+        assert_eq!(gua, Gua8::兑);
 
         // 震卦
         gua.reverse(1);
-        assert_eq!(gua, Gua8::ZHÈN);
+        assert_eq!(gua, Gua8::震);
 
         // 坤卦
         gua.reverse(2);
-        assert_eq!(gua, Gua8::KŪN);
+        assert_eq!(gua, Gua8::坤);
 
         // 艮卦
         gua.reverse(0);
-        assert_eq!(gua, Gua8::GÈN);
+        assert_eq!(gua, Gua8::艮);
 
         // 巽卦
         gua.reverse(1);
-        assert_eq!(gua, Gua8::XÙN);
+        assert_eq!(gua, Gua8::巽);
 
         // 坎卦
         gua.reverse(0);
-        assert_eq!(gua, Gua8::KǍN);
+        assert_eq!(gua, Gua8::坎);
 
         // 离卦
         gua.reverse(0);
         gua.reverse(1);
         gua.reverse(2);
-        assert_eq!(gua, Gua8::LÍ);
+        assert_eq!(gua, Gua8::离);
     }
 }

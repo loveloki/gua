@@ -8,8 +8,8 @@ pub struct Yao {
 }
 
 impl Yao {
-    pub const YIN: Yao = Yao { status: false };
-    pub const YANG: Yao = Yao { status: true };
+    pub const 阴: Yao = Yao { status: false };
+    pub const 阳: Yao = Yao { status: true };
 
     pub fn new(is_yang: bool) -> Self {
         Yao { status: is_yang }
