@@ -8,6 +8,9 @@ repository = "https://github.com/loveloki/gua"
 anyhow = "1.0.100"
 gpui = "0.2.2"
 gpui-component = "0.3.1"
+rand = "0.9.2"
+serde = "1.0.228"
+serde_json = "1.0.145"
 time = { version = "0.3.44", features = ["macros", "local-offset" ,"formatting"] }
 
 # The profile that 'dist' will build with

@@ -12,3 +12,9 @@
 - 搜索功能？（过滤卦名等）
 - 数据导入导出
 - 云同步？
+
+## 致谢
+
+- [gpui](https://www.gpui.rs/)
+- [gpui-component](https://github.com/longbridge/gpui-component)
+- [yijing](https://github.com/freizl/yijing)

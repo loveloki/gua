@@ -1,6 +1,47 @@
-use gpui::SharedString;
+use gpui::{Context, IntoElement, Render, SharedString, Window};
+use gpui_component::description_list::DescriptionList;
+use serde::{Deserialize, Serialize};
 
 use super::yao::*;
+
+/**
+ * 64卦信息结构体
+ */
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Gua64Info {
+    pub id: String,
+    pub name: String,
+    pub gua_ci: String,
+    pub tuan_ci: String,
+    pub da_xiang: String,
+    pub yao_ci: Vec<String>,
+    pub xiao_xiang: Vec<String>,
+    pub symbol: String,
+}
+
+impl Render for Gua64Info {
+    fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
+        let id = self.id.clone();
+        let name = self.name.clone();
+        let gua_ci = self.gua_ci.clone();
+        let tuan_ci = self.tuan_ci.clone();
+        let da_xiang = self.da_xiang.clone();
+        let yao_ci = self.yao_ci.clone();
+        let xiao_xiang = self.xiao_xiang.clone();
+        let symbol = self.symbol.clone();
+
+        DescriptionList::new()
+            .columns(1)
+            .child("二进制", id, 1)
+            .child("名称", name, 1)
+            .child("卦辞", gua_ci, 1)
+            .child("彖辞", tuan_ci, 1)
+            .child("大象", da_xiang, 1)
+            .child("爻辞", yao_ci.join(", "), 1)
+            .child("小象", xiao_xiang.join(", "), 1)
+            .child("符号", symbol, 1)
+    }
+}
 
 /**
  * 三爻卦
@@ -112,9 +153,22 @@ impl Gua8 {
  */
 #[derive(Clone)]
 pub struct Gua64 {
+    /**
+     * 上卦
+     */
     shang: Gua8,
+    /**
+     * 下卦
+     */
     xia: Gua8,
+    /**
+     * 名称
+     */
     name: SharedString,
+    // /**
+    //  * 释义等信息
+    //  */
+    // info: GuaInfo,
 }
 
 impl Gua64 {

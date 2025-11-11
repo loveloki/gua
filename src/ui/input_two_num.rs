@@ -1,6 +1,5 @@
 use gpui::{
-    App, AppContext, Context, Entity, IntoElement, ParentElement, Render, SharedString, Styled,
-    Window, div,
+    App, AppContext, Context, Entity, IntoElement, ParentElement, Render, Styled, Window, div,
 };
 use gpui_component::{
     StyledExt,

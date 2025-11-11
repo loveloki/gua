@@ -4,6 +4,7 @@ use gpui_component::Root;
 use crate::{state::global::GlobalState, ui::home::HomeWindow};
 
 mod app_menus;
+mod assets;
 mod gua;
 mod state;
 mod ui;

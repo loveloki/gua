@@ -1,19 +1,31 @@
 use gpui::{App, Global};
 
-use crate::gua::ba_gua::GuaResult;
+use crate::{
+    assets::init_gua64_info,
+    gua::{ba_gua::GuaResult, basic::Gua64Info},
+};
 
 pub struct GlobalState {
     /**
      * 算卦结果
      */
     pub result: Option<GuaResult>,
+    /**
+     * 64卦信息
+     */
+    pub gua64_info_list: Vec<Gua64Info>,
 }
 
 impl Global for GlobalState {}
 
 impl GlobalState {
     pub fn init(cx: &mut App) {
-        cx.set_global::<GlobalState>(GlobalState { result: None });
+        let gua64_info_list = init_gua64_info();
+
+        cx.set_global::<GlobalState>(GlobalState {
+            result: None,
+            gua64_info_list,
+        });
     }
 
     pub fn state(cx: &mut App) -> &Self {
