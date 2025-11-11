@@ -1,6 +1,6 @@
 use gpui::{App, AppContext, Context, Entity, IntoElement, ParentElement, Render, Window, div};
 
-use crate::{gua::ba_gua::GuaResult, state::global::GlobalState};
+use crate::state::global::GlobalState;
 
 /**
  * 算卦结果
@@ -22,11 +22,7 @@ impl Render for ResultPanel {
 
         match gua_result {
             None => div().child("还没有进行算卦！".to_string()),
-            Some(result) => {
-                let result_text = result.display();
-
-                div().child(result_text)
-            }
+            Some(result) => div().child(cx.new(|_| result)),
         }
 
         // div().child(gua_result.display().clone())

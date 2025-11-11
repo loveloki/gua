@@ -1,6 +1,6 @@
 use std::{fmt::Debug, time::SystemTime};
 
-use gpui::SharedString;
+use gpui::{Context, IntoElement, ParentElement, Render, SharedString, Window, div};
 
 use crate::gua::basic::{Gua8, Gua64};
 
@@ -67,5 +67,11 @@ impl GuaResult {
         let bian_gua = self.bian_gua.display();
 
         format!("本卦：{}\n变卦：{}", ben_gua, bian_gua).into()
+    }
+}
+
+impl Render for GuaResult {
+    fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
+        div().child(self.display())
     }
 }

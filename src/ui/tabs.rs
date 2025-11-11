@@ -41,7 +41,7 @@ impl Tabs {
         }
     }
 
-    fn render_tab_content(&self, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render_tab_content(&self, _: &mut Context<Self>) -> impl IntoElement {
         match self.active_tab {
             0 => div().child("主页"),
             1 => div().child(self.input_two_num_panel.clone()),
