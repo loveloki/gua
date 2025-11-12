@@ -2,7 +2,7 @@ use std::usize;
 
 use gpui::*;
 use gpui_component::{
-    button::{Button, ButtonVariants},
+    button::Button,
     tab::{Tab, TabBar},
     v_flex,
 };
@@ -59,12 +59,7 @@ impl Tabs {
                 .flex()
                 .flex_col()
                 .child(
-                    div().flex().gap_1().children([
-                        Button::new("quit")
-                            .danger()
-                            .outline()
-                            .label("退出")
-                            .on_click(|_, _, cx| cx.quit()),
+                    div().flex().gap_1().child(
                         Button::new("random-gua")
                             .outline()
                             .label("随机展示一卦的信息")
@@ -72,7 +67,7 @@ impl Tabs {
                                 this.random_gua_info_index =
                                     get_random_gua_index(cx, this.random_gua_info_index)
                             })),
-                    ]),
+                    ),
                 )
                 .gap_3()
                 .child({

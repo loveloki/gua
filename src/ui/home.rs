@@ -1,9 +1,13 @@
 use gpui::*;
+use gpui_component::h_flex;
+
+use crate::ui::sidebar::AppSideBar;
 
 use super::tabs::Tabs;
 
 pub struct HomeWindow {
     tabs: Entity<Tabs>,
+    sidebar: Entity<AppSideBar>,
 }
 
 impl HomeWindow {
@@ -13,13 +17,17 @@ impl HomeWindow {
 
     fn new(window: &mut Window, cx: &mut Context<Self>) -> Self {
         let tabs = Tabs::view(window, cx);
+        let sidebar = AppSideBar::view(window, cx);
 
-        Self { tabs }
+        Self { tabs, sidebar }
     }
 }
 
 impl Render for HomeWindow {
     fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
-        div().child(self.tabs.clone())
+        h_flex()
+            .h_full()
+            .child(div().h_full().child(self.sidebar.clone()))
+            .child(div().flex_1().h_full().child(self.tabs.clone()))
     }
 }

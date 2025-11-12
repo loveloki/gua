@@ -83,13 +83,6 @@ impl Render for InputTwoNumContent {
             .p_2()
             .v_flex()
             .gap_2()
-            .child(
-                Button::new("quit")
-                    .danger()
-                    .outline()
-                    .label("退出")
-                    .on_click(|_, _, cx| cx.quit()),
-            )
             .child(TextInput::new(&self.input1_state))
             .child(TextInput::new(&self.input2_state))
             .child(
