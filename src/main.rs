@@ -1,7 +1,7 @@
 use gpui::{AppContext, Application, WindowOptions};
 use gpui_component::Root;
 
-use crate::{state::global::GlobalState, ui::home::HomeWindow};
+use crate::{assets::Assets, state::global::GlobalState, ui::home::HomeWindow};
 
 mod app_menus;
 mod assets;
@@ -10,7 +10,7 @@ mod state;
 mod ui;
 
 fn main() {
-    let app = Application::new();
+    let app = Application::new().with_assets(Assets);
 
     app.run(move |cx| {
         // This must be called before using any GPUI Component features.
