@@ -7,7 +7,7 @@ use gpui_component::{
     input::{InputState, TextInput},
 };
 
-use crate::{gua::ba_gua::BaGuaCalculator, state::global::GlobalState};
+use crate::{gua::ba_gua::BaGuaCalculator, state::global::GlobalState, ui::home::AppPanel};
 
 pub struct InputTwoNumPanel {
     content: Entity<InputTwoNumContent>,

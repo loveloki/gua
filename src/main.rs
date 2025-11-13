@@ -1,4 +1,4 @@
-use gpui::{AppContext, Application, SharedString, TitlebarOptions, WindowOptions, px};
+use gpui::{AppContext, Application, TitlebarOptions, WindowOptions};
 use gpui_component::Root;
 
 use crate::{

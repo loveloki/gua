@@ -9,7 +9,10 @@ use gpui_component::{
 use rand::Rng;
 
 use super::result::ResultPanel;
-use crate::{state::global::GlobalState, ui::input_two_num::InputTwoNumPanel};
+use crate::{
+    state::global::GlobalState,
+    ui::{home::AppPanel, input_two_num::InputTwoNumPanel, sidebar::PanelItem},
+};
 
 /**
  * 切换算卦和结果
@@ -55,30 +58,7 @@ impl Tabs {
 
     fn render_tab_content(&self, cx: &mut Context<Self>) -> impl IntoElement {
         match self.active_tab {
-            0 => div()
-                .flex()
-                .flex_col()
-                .child(
-                    div().flex().gap_1().child(
-                        Button::new("random-gua")
-                            .outline()
-                            .label("随机展示一卦的信息")
-                            .on_click(cx.listener(|this, _, _, cx| {
-                                this.random_gua_info_index =
-                                    get_random_gua_index(cx, this.random_gua_info_index)
-                            })),
-                    ),
-                )
-                .gap_3()
-                .child({
-                    let gua64_info_list = GlobalState::state(cx).gua64_info_list.clone();
-                    let gua64_info = gua64_info_list
-                        .get(self.random_gua_info_index)
-                        .unwrap()
-                        .clone();
-
-                    cx.new(|_| gua64_info)
-                }),
+            // 0 =>
             1 => div().child(self.input_two_num_panel.clone()),
             2 => div().child(self.result_panel.clone()),
             _ => div(),
@@ -101,5 +81,15 @@ impl Render for Tabs {
                     .child(Tab::new("结果")),
             )
             .child(div().flex_1().p_4().child(self.render_tab_content(cx)))
+    }
+}
+
+impl AppPanel for Tabs {
+    fn new_view(window: &mut Window, cx: &mut App) -> Entity<impl Render> {
+        Self::view(window, cx)
+    }
+
+    fn get_id() -> PanelItem {
+        PanelItem::QiGua
     }
 }
