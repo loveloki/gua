@@ -1,7 +1,11 @@
-use gpui::{AppContext, Application, WindowOptions};
+use gpui::{AppContext, Application, TitlebarOptions, WindowOptions, px};
 use gpui_component::Root;
 
-use crate::{assets::Assets, state::global::GlobalState, ui::home::HomeWindow};
+use crate::{
+    assets::Assets,
+    state::{app_state::AppState, global::GlobalState},
+    ui::home::HomeWindow,
+};
 
 mod app_menus;
 mod assets;
@@ -16,15 +20,27 @@ fn main() {
         // This must be called before using any GPUI Component features.
         gpui_component::init(cx);
         GlobalState::init(cx);
+        AppState::init(cx);
 
         app_menus::init("简单的八卦计算器", cx);
 
         cx.spawn(async move |cx| {
-            cx.open_window(WindowOptions::default(), |window, cx| {
-                let view = HomeWindow::view(window, cx);
-                // This first level on the window, should be a Root.
-                cx.new(|cx| Root::new(view.into(), window, cx))
-            })?;
+            cx.open_window(
+                WindowOptions {
+                    show: true,
+                    titlebar: Some(TitlebarOptions {
+                        title: None,
+                        appears_transparent: true,
+                        traffic_light_position: Some(gpui::point(px(9.0), px(9.0))),
+                    }),
+                    ..Default::default()
+                },
+                |window, cx| {
+                    let view = HomeWindow::view(window, cx);
+                    // This first level on the window, should be a Root.
+                    cx.new(|cx| Root::new(view.into(), window, cx))
+                },
+            )?;
 
             Ok::<_, anyhow::Error>(())
         })
