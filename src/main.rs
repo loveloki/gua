@@ -1,4 +1,4 @@
-use gpui::{AppContext, Application, TitlebarOptions, WindowOptions, px};
+use gpui::{AppContext, Application, SharedString, TitlebarOptions, WindowOptions, px};
 use gpui_component::Root;
 
 use crate::{
@@ -29,9 +29,8 @@ fn main() {
                 WindowOptions {
                     show: true,
                     titlebar: Some(TitlebarOptions {
-                        title: None,
-                        appears_transparent: true,
-                        traffic_light_position: Some(gpui::point(px(9.0), px(9.0))),
+                        title: Some("简单的自己算卦".into()),
+                        ..Default::default()
                     }),
                     ..Default::default()
                 },
