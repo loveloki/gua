@@ -1,19 +1,12 @@
 use gpui::{App, Global};
 
-pub struct AppState {
-    /**
-     * 侧边栏是否折叠
-     */
-    pub sidebar_collapsed: bool,
-}
+pub struct AppState {}
 
 impl Global for AppState {}
 
 impl AppState {
     pub fn init(cx: &mut App) {
-        cx.set_global::<AppState>(AppState {
-            sidebar_collapsed: false,
-        });
+        cx.set_global::<AppState>(AppState {});
     }
 
     pub fn state(cx: &mut App) -> &Self {
