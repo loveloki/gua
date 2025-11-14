@@ -1,11 +1,7 @@
-use gpui::{AppContext, Application, SharedString, TitlebarOptions, WindowOptions, px};
+use gpui::{AppContext, Application, TitlebarOptions, WindowOptions};
 use gpui_component::Root;
 
-use crate::{
-    assets::Assets,
-    state::{app_state::AppState, global::GlobalState},
-    ui::home::HomeWindow,
-};
+use crate::{assets::Assets, state::global::GlobalState, ui::home::HomeWindow};
 
 mod app_menus;
 mod assets;
@@ -20,7 +16,6 @@ fn main() {
         // This must be called before using any GPUI Component features.
         gpui_component::init(cx);
         GlobalState::init(cx);
-        AppState::init(cx);
 
         app_menus::init("简单的八卦计算器", cx);
 

@@ -1,10 +1,11 @@
 use gpui::{App, AppContext, Context, Entity, IntoElement, Render, Window, prelude::FluentBuilder};
 use gpui_component::{Icon, IconName, Side, sidebar::*};
 
-#[derive(PartialEq)]
-enum Item {
+#[derive(PartialEq, Eq, Clone)]
+pub enum StageItem {
     QiGua,
     History,
+    Library,
 }
 
 /**
@@ -12,18 +13,18 @@ enum Item {
  */
 pub struct AppSideBar {
     collapsed: bool,
-    active_item: Item,
+    pub active_stage: StageItem,
 }
 
 impl AppSideBar {
-    pub fn view(window: &mut Window, cx: &mut App) -> Entity<Self> {
-        cx.new(|cx| Self::new(window, cx))
+    pub fn view(window: &mut Window, cx: &mut App, active_stage: StageItem) -> Entity<Self> {
+        cx.new(|cx| Self::new(window, cx, active_stage))
     }
 
-    fn new(_: &mut Window, _: &mut Context<Self>) -> Self {
+    fn new(_: &mut Window, _: &mut Context<Self>, active_stage: StageItem) -> Self {
         Self {
             collapsed: false,
-            active_item: Item::QiGua,
+            active_stage,
         }
     }
 }
@@ -39,18 +40,26 @@ impl Render for AppSideBar {
                         .child(
                             SidebarMenuItem::new("起卦")
                                 .icon(Icon::empty().path("icons/pencil-line.svg"))
-                                .active(self.active_item == Item::QiGua)
-                                .on_click(
-                                    cx.listener(|this, _, _, _| this.active_item = Item::QiGua),
-                                ),
+                                .active(self.active_stage == StageItem::QiGua)
+                                .on_click(cx.listener(|this, _, _, _| {
+                                    this.active_stage = StageItem::QiGua;
+                                })),
                         )
                         .child(
                             SidebarMenuItem::new("历史")
                                 .icon(Icon::empty().path("icons/history.svg"))
-                                .active(self.active_item == Item::History)
-                                .on_click(
-                                    cx.listener(|this, _, _, _| this.active_item = Item::History),
-                                ),
+                                .active(self.active_stage == StageItem::History)
+                                .on_click(cx.listener(|this, _, _, _| {
+                                    this.active_stage = StageItem::History;
+                                })),
+                        )
+                        .child(
+                            SidebarMenuItem::new("资源")
+                                .icon(Icon::empty().path("icons/library.svg"))
+                                .active(self.active_stage == StageItem::Library)
+                                .on_click(cx.listener(|this, _, _, _| {
+                                    this.active_stage = StageItem::Library;
+                                })),
                         ),
                 ),
             )

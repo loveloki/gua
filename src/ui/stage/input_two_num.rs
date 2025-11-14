@@ -9,11 +9,11 @@ use gpui_component::{
 
 use crate::{gua::ba_gua::BaGuaCalculator, state::global::GlobalState};
 
-pub struct InputTwoNumPanel {
+pub struct InputTwoNum {
     content: Entity<InputTwoNumContent>,
 }
 
-impl InputTwoNumPanel {
+impl InputTwoNum {
     pub fn view(window: &mut Window, cx: &mut App) -> Entity<Self> {
         cx.new(|cx| Self::new(window, cx))
     }
@@ -25,14 +25,9 @@ impl InputTwoNumPanel {
     }
 }
 
-impl Render for InputTwoNumPanel {
+impl Render for InputTwoNum {
     fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
-        div()
-            .flex()
-            .size_full()
-            .items_center()
-            .justify_center()
-            .child(self.content.clone())
+        div().p_2().child(self.content.clone())
     }
 }
 
@@ -58,8 +53,6 @@ impl InputTwoNumContent {
         let gua_result = GlobalState::state_mut(cx);
 
         gua_result.result = Some(ba_gua_result);
-
-        // self.result_text = ba_gua_result.display();
 
         cx.notify();
     }
