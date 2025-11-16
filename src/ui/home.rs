@@ -2,12 +2,14 @@ use gpui::{prelude::FluentBuilder, *};
 use gpui_component::{h_flex, v_flex};
 
 use crate::ui::{
+    header::AppHeader,
     sidebar::{AppSideBar, StageItem},
     stage::{history::History, library::Library, qi_gua::QiGua},
 };
 
 pub struct HomeWindow {
     sidebar: Entity<AppSideBar>,
+    header: Entity<AppHeader>,
     stages: Vec<Entity<StageContainer>>,
 }
 
@@ -24,8 +26,13 @@ impl HomeWindow {
         ];
 
         let sidebar = AppSideBar::view(window, cx, StageItem::QiGua);
+        let header = AppHeader::view(window, cx);
 
-        Self { sidebar, stages }
+        Self {
+            sidebar,
+            stages,
+            header,
+        }
     }
 }
 
@@ -45,7 +52,7 @@ impl Render for HomeWindow {
 
         let active_stage = active_stages.get(0).unwrap();
 
-        v_flex().h_full().child(
+        v_flex().h_full().child(self.header.clone()).child(
             h_flex()
                 .flex_1()
                 .child(div().h_full().child(self.sidebar.clone()))
