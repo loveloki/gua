@@ -1,12 +1,15 @@
 use gpui::{
-    App, AppContext, Context, Entity, IntoElement, ParentElement, Render, Styled, Window, div,
+    App, AppContext, Context, Entity, IntoElement, ParentElement, Render, SharedString, Styled,
+    Window, div,
 };
 use gpui_component::{
-    StyledExt,
+    Disableable, StyledExt,
     button::{Button, ButtonVariants},
 };
 
 use crate::qigua::core::QiGuaCore;
+
+const NAME: &str = "六爻";
 
 /**
  * 六爻起卦
@@ -56,11 +59,13 @@ impl Render for LiuYaoContent {
             .p_2()
             .v_flex()
             .gap_2()
+            .child(NAME)
             .child("暂未实现！")
             .child(
                 Button::new("calc")
                     .label("开始计算")
                     .primary()
+                    .disabled(true)
                     .on_click(move |_, _, cx| {
                         cx.update_entity(
                             &entity,
@@ -74,7 +79,8 @@ impl Render for LiuYaoContent {
 }
 
 impl QiGuaCore for LiuYaoContent {
-    fn calc_gua(&mut self, cx: &mut Context<Self>) {
-        todo!()
+    fn calc_gua(&mut self, cx: &mut Context<Self>) {}
+    fn name() -> SharedString {
+        NAME.into()
     }
 }

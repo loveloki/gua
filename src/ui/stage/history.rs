@@ -15,11 +15,20 @@ impl History {
     fn new(_: &mut Window, _: &mut Context<Self>) -> Self {
         Self {}
     }
+
+    /**
+     * 标题
+     */
+    pub fn title(&self) -> impl IntoElement {
+        div()
+            .child(div().child("卜卦记录").text_2xl())
+            .child(div().child("查看您的所有卜卦历史记录"))
+    }
 }
 
 impl Render for History {
     fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
-        div().child("暂未实现")
+        div().child(self.title()).child("暂未实现")
     }
 }
 

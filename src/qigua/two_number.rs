@@ -1,5 +1,6 @@
 use gpui::{
-    App, AppContext, Context, Entity, IntoElement, ParentElement, Render, Styled, Window, div,
+    App, AppContext, Context, Entity, IntoElement, ParentElement, Render, SharedString, Styled,
+    Window, div,
 };
 use gpui_component::{
     StyledExt,
@@ -8,6 +9,8 @@ use gpui_component::{
 };
 
 use crate::{gua::ba_gua::BaGuaCalculator, qigua::core::QiGuaCore, state::global::GlobalState};
+
+const NAME: &str = "两个数字";
 
 /**
  * 两个数字起卦
@@ -66,6 +69,7 @@ impl Render for InputTwoNumContent {
             .p_2()
             .v_flex()
             .gap_2()
+            .child(NAME)
             .child(TextInput::new(&self.input1_state))
             .child(TextInput::new(&self.input2_state))
             .child(
@@ -97,5 +101,8 @@ impl QiGuaCore for InputTwoNumContent {
         gua_result.result = Some(ba_gua_result.clone());
 
         cx.notify();
+    }
+    fn name() -> SharedString {
+        NAME.into()
     }
 }
