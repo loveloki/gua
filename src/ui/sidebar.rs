@@ -6,6 +6,7 @@ pub enum StageItem {
     QiGua,
     History,
     Library,
+    About,
 }
 
 /**
@@ -34,7 +35,7 @@ impl Render for AppSideBar {
         Sidebar::new(Side::Left)
             .collapsed(self.collapsed)
             .collapsible(true)
-            .child(
+            .children([
                 SidebarGroup::new("常用").child(
                     SidebarMenu::new()
                         .child(
@@ -62,7 +63,17 @@ impl Render for AppSideBar {
                                 })),
                         ),
                 ),
-            )
+                SidebarGroup::new("设置").child(
+                    SidebarMenu::new().child(
+                        SidebarMenuItem::new("关于")
+                            .icon(Icon::empty().path("icons/info.svg"))
+                            .active(self.active_stage == StageItem::About)
+                            .on_click(cx.listener(|this, _, _, _| {
+                                this.active_stage = StageItem::About;
+                            })),
+                    ),
+                ),
+            ])
             .footer(
                 SidebarMenuItem::new("折叠")
                     .icon(Icon::new(IconName::PanelLeftClose))

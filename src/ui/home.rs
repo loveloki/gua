@@ -4,7 +4,7 @@ use gpui_component::{h_flex, v_flex};
 use crate::ui::{
     header::AppHeader,
     sidebar::{AppSideBar, StageItem},
-    stage::{history::History, library::Library, qi_gua::QiGua},
+    stage::{about::About, history::History, library::Library, qi_gua::QiGua},
 };
 
 pub struct HomeWindow {
@@ -23,6 +23,7 @@ impl HomeWindow {
             StageContainer::view::<QiGua>(window, cx),
             StageContainer::view::<Library>(window, cx),
             StageContainer::view::<History>(window, cx),
+            StageContainer::view::<About>(window, cx),
         ];
 
         let sidebar = AppSideBar::view(window, cx, StageItem::QiGua);

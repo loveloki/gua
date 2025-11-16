@@ -1,5 +1,5 @@
 use anyhow::{Ok, Result};
-use gpui::{App, AppContext, AsyncApp, Context, Entity, Global, SemanticVersion, Task};
+use gpui::{App, AppContext, AsyncApp, Context, Entity, Global, SemanticVersion, Task, Window};
 use serde::Deserialize;
 use std::{
     env::consts::{ARCH, OS},
@@ -56,7 +56,8 @@ pub fn init(cx: &mut App) {
 
         let updater = AutoUpdater::new(current_version);
 
-        updater.start_polling(cx).detach();
+        // 暂时禁用自动更新，等异步请求处理后再开启
+        // updater.start_polling(cx).detach();
 
         updater
     });
@@ -119,8 +120,25 @@ impl AutoUpdater {
         })
     }
 
+    /**
+     * 检查更新
+     */
+    pub fn check(_: &mut Window, cx: &mut App) {
+        if let Some(updater) = AutoUpdater::get(cx) {
+            updater.update(cx, |this, cx| {
+                this.poll(UpdateCheckType::Manual, cx);
+            })
+        }
+    }
+
     pub fn poll(&mut self, check_type: UpdateCheckType, cx: &mut Context<Self>) {
-        println!("执行 poll");
+        println!(
+            "执行 poll，类型：{}",
+            match check_type {
+                UpdateCheckType::Automatic => "自动",
+                UpdateCheckType::Manual => "手动",
+            }
+        );
         // 有正在执行的就直接停止
         if self.pending_poll.is_some() {
             return;

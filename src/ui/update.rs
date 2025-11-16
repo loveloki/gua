@@ -42,13 +42,7 @@ impl Update {
 
 impl Render for Update {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        let updater = AutoUpdater::get(cx)
-            .map(|item| {
-                let s = item.read(cx);
-
-                s
-            })
-            .unwrap();
+        let updater = AutoUpdater::get(cx).map(|item| item.read(cx)).unwrap();
 
         let update_info = updater.update_info();
 
