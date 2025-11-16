@@ -7,7 +7,7 @@ use gpui_component::{
     input::{InputState, TextInput},
 };
 
-use crate::{gua::ba_gua::BaGuaCalculator, state::global::GlobalState};
+use crate::{gua::ba_gua::BaGuaCalculator, qigua::core::QiGuaCore, state::global::GlobalState};
 
 /**
  * 两个数字起卦
@@ -47,19 +47,6 @@ impl InputTwoNumContent {
         cx.new(|cx| Self::new(window, cx))
     }
 
-    fn calc_result(&mut self, cx: &mut Context<Self>) {
-        let value1: u16 = self.input1_state.read(cx).value().parse().unwrap_or(0);
-        let value2: u16 = self.input2_state.read(cx).value().parse().unwrap_or(0);
-
-        let ba_gua_result = BaGuaCalculator::calculate_from_two_numbers(value1, value2);
-
-        let gua_result = GlobalState::state_mut(cx);
-
-        gua_result.result = Some(ba_gua_result);
-
-        cx.notify();
-    }
-
     fn new(window: &mut Window, cx: &mut Context<Self>) -> Self {
         let input1_state = cx.new(|cx| InputState::new(window, cx).placeholder("输入数字1"));
         let input2_state = cx.new(|cx| InputState::new(window, cx).placeholder("输入数字2"));
@@ -90,10 +77,25 @@ impl Render for InputTwoNumContent {
                             &entity,
                             |input: &mut InputTwoNumContent,
                              context: &mut Context<InputTwoNumContent>| {
-                                input.calc_result(context)
+                                input.calc_gua(context)
                             },
                         );
                     }),
             )
+    }
+}
+
+impl QiGuaCore for InputTwoNumContent {
+    fn calc_gua(&mut self, cx: &mut Context<Self>) {
+        let value1: u16 = self.input1_state.read(cx).value().parse().unwrap_or(0);
+        let value2: u16 = self.input2_state.read(cx).value().parse().unwrap_or(0);
+
+        let ba_gua_result = BaGuaCalculator::calculate_from_two_numbers(value1, value2);
+
+        let gua_result = GlobalState::state_mut(cx);
+
+        gua_result.result = Some(ba_gua_result.clone());
+
+        cx.notify();
     }
 }
