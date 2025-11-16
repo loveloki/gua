@@ -9,11 +9,14 @@ use gpui_component::{
 
 use crate::{gua::ba_gua::BaGuaCalculator, state::global::GlobalState};
 
-pub struct InputTwoNum {
+/**
+ * 两个数字起卦
+ */
+pub struct TwoNumber {
     content: Entity<InputTwoNumContent>,
 }
 
-impl InputTwoNum {
+impl TwoNumber {
     pub fn view(window: &mut Window, cx: &mut App) -> Entity<Self> {
         cx.new(|cx| Self::new(window, cx))
     }
@@ -25,7 +28,7 @@ impl InputTwoNum {
     }
 }
 
-impl Render for InputTwoNum {
+impl Render for TwoNumber {
     fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
         div().p_2().child(self.content.clone())
     }

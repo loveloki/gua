@@ -7,6 +7,7 @@ mod app_menus;
 mod assets;
 mod auto_update;
 mod gua;
+mod qigua;
 mod state;
 mod ui;
 
