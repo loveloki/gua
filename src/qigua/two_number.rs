@@ -5,7 +5,7 @@ use gpui::{
 use gpui_component::{
     StyledExt,
     button::{Button, ButtonVariants},
-    input::{InputState, TextInput},
+    input::{Input, InputState},
 };
 
 use crate::{gua::ba_gua::BaGuaCalculator, qigua::core::QiGuaCore, state::global::GlobalState};
@@ -70,8 +70,8 @@ impl Render for InputTwoNumContent {
             .v_flex()
             .gap_2()
             .child(NAME)
-            .child(TextInput::new(&self.input1_state))
-            .child(TextInput::new(&self.input2_state))
+            .child(Input::new(&self.input1_state))
+            .child(Input::new(&self.input2_state))
             .child(
                 Button::new("calc")
                     .label("开始计算")

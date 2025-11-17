@@ -1,5 +1,5 @@
 use gpui::{Context, IntoElement, Render, SharedString, Window};
-use gpui_component::description_list::DescriptionList;
+use gpui_component::description_list::{DescriptionItem, DescriptionList};
 use serde::{Deserialize, Serialize};
 
 use super::yao::*;
@@ -30,16 +30,20 @@ impl Render for Gua64Info {
         let xiao_xiang = self.xiao_xiang.clone();
         let symbol = self.symbol.clone();
 
-        DescriptionList::new()
-            .columns(1)
-            .child("二进制", id, 1)
-            .child("名称", name, 1)
-            .child("卦辞", gua_ci, 1)
-            .child("彖辞", tuan_ci, 1)
-            .child("大象", da_xiang, 1)
-            .child("爻辞", yao_ci.join(", "), 1)
-            .child("小象", xiao_xiang.join(", "), 1)
-            .child("符号", symbol, 1)
+        DescriptionList::new().columns(1).children([
+            DescriptionItem::new("二进制").value(id).span(1),
+            DescriptionItem::new("名称").value(name).span(1),
+            DescriptionItem::new("卦辞").value(gua_ci).span(1),
+            DescriptionItem::new("彖辞").value(tuan_ci).span(1),
+            DescriptionItem::new("大象").value(da_xiang).span(1),
+            DescriptionItem::new("爻辞")
+                .value(yao_ci.join(", "))
+                .span(1),
+            DescriptionItem::new("小象")
+                .value(xiao_xiang.join(", "))
+                .span(1),
+            DescriptionItem::new("符号").value(symbol).span(1),
+        ])
     }
 }
 
