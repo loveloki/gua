@@ -20,6 +20,9 @@ fn main() {
         GlobalState::init(cx);
         auto_update::init(cx);
 
+        // 打开自动放到前台
+        cx.activate(true);
+
         app_menus::init("简单的八卦计算器", cx);
 
         cx.spawn(async move |cx| {
