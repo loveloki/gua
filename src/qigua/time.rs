@@ -5,9 +5,10 @@ use gpui::{
     Subscription, Window, div,
 };
 use gpui_component::{
-    StyledExt,
+    IndexPath, StyledExt,
     button::{Button, ButtonVariants},
     date_picker::{DatePicker, DatePickerEvent, DatePickerState},
+    select::{Select, SelectEvent, SelectState},
 };
 
 use crate::{
@@ -49,6 +50,7 @@ impl Render for Time {
 pub struct TimeContent {
     date_picker: Entity<DatePickerState>,
     select_time: NaiveDateTime,
+    hour_select_state: Entity<SelectState<Vec<&'static str>>>,
     _subscriptions: Vec<Subscription>,
 }
 
@@ -60,6 +62,18 @@ impl TimeContent {
     fn new(window: &mut Window, cx: &mut Context<Self>) -> Self {
         let select_time = Local::now().naive_local();
 
+        let hour_select_state = cx.new(|cx| {
+            SelectState::new(
+                vec![
+                    "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
+                    "15", "16", "17", "18", "19", "20", "21", "22", "23",
+                ],
+                Some(IndexPath::new(select_time.hour() as usize)),
+                window,
+                cx,
+            )
+        });
+
         let date_picker = cx.new(|cx| {
             let mut picker = DatePickerState::new(window, cx);
             picker.set_date(select_time.date(), window, cx);
@@ -67,33 +81,57 @@ impl TimeContent {
             picker
         });
 
-        let _subscriptions = vec![cx.subscribe(&date_picker, |this, _, ev, _| match ev {
-            DatePickerEvent::Change(date) => {
-                if let Some(d) = date.start() {
-                    let year = d.year();
-                    let month = d.month();
-                    let day = d.day();
+        let _subscriptions = vec![
+            cx.subscribe(&date_picker, |this, _, ev, _| match ev {
+                DatePickerEvent::Change(date) => {
+                    if let Some(d) = date.start() {
+                        let year = d.year();
+                        let month = d.month();
+                        let day = d.day();
 
-                    // 更新选择的日期
-                    this.select_time = this
-                        .select_time
-                        .with_year(year)
-                        .and_then(|t| t.with_month(month))
-                        .and_then(|t| t.with_day(day))
-                        .unwrap();
+                        // 更新选择的日期
+                        this.select_time = this
+                            .select_time
+                            .with_year(year)
+                            .and_then(|t| t.with_month(month))
+                            .and_then(|t| t.with_day(day))
+                            .unwrap();
+                    }
                 }
-            }
-        })];
+            }),
+            cx.subscribe(
+                &hour_select_state,
+                |this, _, event: &SelectEvent<Vec<&'static str>>, _| match event {
+                    SelectEvent::Confirm(value) => {
+                        this.select_time = this
+                            .select_time
+                            .with_hour(value.unwrap().parse::<u32>().unwrap())
+                            .unwrap()
+                    }
+                },
+            ),
+        ];
 
         Self {
             date_picker,
             select_time,
+            hour_select_state,
             _subscriptions,
         }
     }
 
+    /**
+     * 日期选择
+     */
     fn data_picker_content(&self) -> impl IntoElement {
         DatePicker::new(&self.date_picker).number_of_months(1)
+    }
+
+    /**
+     * 小时选择
+     */
+    fn huor_select_content(&self) -> impl IntoElement {
+        Select::new(&self.hour_select_state).title_prefix("时间：")
     }
 }
 
@@ -104,8 +142,9 @@ impl Render for TimeContent {
         let year = self.select_time.year();
         let month = self.select_time.month();
         let day = self.select_time.day();
+        let hour = self.select_time.hour();
 
-        let shi_chen = hour_to_shi_che(self.select_time.hour());
+        let shi_chen = hour_to_shi_chen(hour);
 
         let lunisolar_date = LunisolarDate::from_solar_date(
             SolarDate::from_ymd(year as u16, month as u8, day as u8).unwrap(),
@@ -119,7 +158,8 @@ impl Render for TimeContent {
             .gap_2()
             .child(NAME)
             .child(self.data_picker_content())
-            .child(format!("公历: {}-{}-{}", year, month, day))
+            .child(self.huor_select_content())
+            .child(format!("公历: {}-{}-{} {}", year, month, day, hour))
             .child(format!("农历: {}", lunisolar_date))
             .child(format!("时辰: {}", shi_chen))
             .child(
@@ -151,7 +191,7 @@ impl QiGuaCore for TimeContent {
         )
         .unwrap();
 
-        let shi_chen = hour_to_shi_che(self.select_time.hour());
+        let shi_chen = hour_to_shi_chen(self.select_time.hour());
         let ba_gua_result = time_to_gua(lunisolar_date, shi_chen);
 
         let gua_result = GlobalState::state_mut(cx);
@@ -181,7 +221,7 @@ fn time_to_gua(lunisolar_date: LunisolarDate, shi_chen: EarthlyBranch) -> GuaRes
 /**
  * 根据小时获取时辰
  */
-fn hour_to_shi_che(hour: u32) -> EarthlyBranch {
+fn hour_to_shi_chen(hour: u32) -> EarthlyBranch {
     match hour {
         23 | 0 => EarthlyBranch::First,     // 子时: 23:00-01:00
         1 | 2 => EarthlyBranch::Second,     // 丑时: 01:00-03:00
