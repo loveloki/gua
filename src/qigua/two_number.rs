@@ -97,7 +97,6 @@ impl QiGuaCore for InputTwoNumContent {
         let ba_gua_result = BaGuaCalculator::calculate_from_two_numbers(value1, value2);
 
         let gua_result = GlobalState::state_mut(cx);
-
         gua_result.result = Some(ba_gua_result.clone());
 
         cx.notify();
