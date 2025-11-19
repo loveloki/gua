@@ -3,7 +3,7 @@ use std::fmt::Debug;
 use gpui::{Context, IntoElement, ParentElement, Render, SharedString, Window, div};
 use time::{OffsetDateTime, macros::format_description};
 
-use crate::gua::basic::{Gua8, Gua64};
+use crate::gua::basic::{Gua8, Gua64, ichang_mod};
 
 /// 卦象计算器
 #[derive(Debug)]
@@ -15,19 +15,19 @@ impl BaGuaCalculator {
      */
     pub fn calculate_from_two_numbers(num1: u16, num2: u16) -> GuaResult {
         // 1. 将 num1 取余数
-        let result1 = (num1 % 8) as u8;
-        let result2 = (num2 % 8) as u8;
+        let shang_num = ichang_mod(num1, 8);
+        let xia_num = ichang_mod(num2, 8);
 
         // 本卦
-        let ben_gua = Gua64::new(Gua8::from_num(result1), Gua8::from_num(result2));
+        let ben_gua = Gua64::new(Gua8::from_num(shang_num), Gua8::from_num(xia_num));
 
-        let sum = num1 as u16 + num2 as u16;
-        let result3 = (sum % 6) as u8;
-        let reverse_index = 5 - result3;
+        // 将两个数字相加取余
+        // 余数即变化的位置
+        let bian_index = ichang_mod(num1 + num2, 6);
 
         // 变卦
         let mut bian_gua = ben_gua.clone();
-        bian_gua.change(reverse_index);
+        bian_gua.change(bian_index);
 
         GuaResult::new(ben_gua, bian_gua)
     }

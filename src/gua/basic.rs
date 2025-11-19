@@ -143,10 +143,10 @@ impl Gua8 {
      */
     pub fn reverse(&mut self, index: u8) {
         match index {
-            0 => self.yao1.reverse(),
-            1 => self.yao2.reverse(),
-            2 => self.yao3.reverse(),
-            _ => !unreachable!("翻转爻只可能是 0, 1, 2"),
+            1 => self.yao1.reverse(),
+            2 => self.yao2.reverse(),
+            3 => self.yao3.reverse(),
+            _ => !unreachable!("翻转爻只可能是 1, 2, 3"),
         }
     }
 }
@@ -584,11 +584,18 @@ impl Gua64 {
 
     /**
      * 进行变卦
+     * 传入的 num 应该为 1 到 6
+     * 顺序为从下到上，即 1 是下卦的最后一个爻，6 是上卦的第一个爻
      */
     pub fn change(&mut self, num: u8) {
         match num {
-            0 | 1 | 2 => self.shang.reverse(num),
-            _ => self.xia.reverse(num - 3),
+            1 => self.xia.reverse(3),
+            2 => self.xia.reverse(2),
+            3 => self.xia.reverse(1),
+            4 => self.shang.reverse(3),
+            5 => self.shang.reverse(2),
+            6 => self.shang.reverse(1),
+            _ => !unreachable!("变卦的爻只能是 1 到 6"),
         }
 
         self.name = Self::name(self.shang, self.xia);
@@ -606,12 +613,12 @@ impl Gua64 {
 /// * `number`: 被除数
 /// * `base`: 基数
 /// ```
-pub fn ichang_mod(number: u8, base: u8) -> u8 {
+pub fn ichang_mod(number: u16, base: u16) -> u8 {
     let a = number % base;
 
     match a {
-        0 => base,
-        _ => a,
+        0 => base as u8,
+        _ => a as u8,
     }
 }
 
