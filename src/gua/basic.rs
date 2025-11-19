@@ -146,7 +146,7 @@ impl Gua8 {
             0 => self.yao1.reverse(),
             1 => self.yao2.reverse(),
             2 => self.yao3.reverse(),
-            _ => !unreachable!(),
+            _ => !unreachable!("翻转爻只可能是 0, 1, 2"),
         }
     }
 }
@@ -595,9 +595,29 @@ impl Gua64 {
     }
 }
 
+/// 梅花易数的“取余”逻辑
+///
+/// 遵循“除尽则为满”的原则：
+/// - 如果能被整除（余数为 0），则结果为基数本身（base）。
+/// - 否则，结果为余数。
+///
+/// # Arguments
+///
+/// * `number`: 被除数
+/// * `base`: 基数
+/// ```
+pub fn ichang_mod(number: u8, base: u8) -> u8 {
+    let a = number % base;
+
+    match a {
+        0 => base,
+        _ => a,
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{Gua8, Gua64, Yao};
+    use super::{Gua8, Yao, ichang_mod};
 
     #[test]
     /**
@@ -638,5 +658,20 @@ mod tests {
         gua.reverse(1);
         gua.reverse(2);
         assert_eq!(gua, Gua8::离);
+    }
+
+    #[test]
+    /**
+     * 测试 ichang_mod 函数
+     */
+    fn test_ichang_mod() {
+        assert_eq!(ichang_mod(0, 6), 6);
+        assert_eq!(ichang_mod(1, 6), 1);
+        assert_eq!(ichang_mod(2, 6), 2);
+        assert_eq!(ichang_mod(3, 6), 3);
+        assert_eq!(ichang_mod(4, 6), 4);
+        assert_eq!(ichang_mod(5, 6), 5);
+        assert_eq!(ichang_mod(6, 6), 6);
+        assert_eq!(ichang_mod(7, 6), 1);
     }
 }
