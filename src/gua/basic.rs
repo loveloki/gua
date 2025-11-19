@@ -120,7 +120,6 @@ impl Gua8 {
 
     /**
      * 解析数字，返回 BaGua
-     * 便于取余计算，所以坤用的是 0 而不是 8
      */
     pub fn from_num(num: u8) -> Self {
         let result = match num {
@@ -131,7 +130,7 @@ impl Gua8 {
             5 => Gua8::巽,
             6 => Gua8::坎,
             7 => Gua8::艮,
-            0 => Gua8::坤,
+            8 => Gua8::坤,
             _ => !unreachable!(),
         };
 
@@ -637,33 +636,33 @@ mod tests {
         assert_eq!(gua, Gua8::乾);
 
         // 兑卦
-        gua.reverse(0);
+        gua.reverse(1);
         assert_eq!(gua, Gua8::兑);
 
         // 震卦
-        gua.reverse(1);
+        gua.reverse(2);
         assert_eq!(gua, Gua8::震);
 
         // 坤卦
-        gua.reverse(2);
+        gua.reverse(3);
         assert_eq!(gua, Gua8::坤);
 
         // 艮卦
-        gua.reverse(0);
+        gua.reverse(1);
         assert_eq!(gua, Gua8::艮);
 
         // 巽卦
-        gua.reverse(1);
+        gua.reverse(2);
         assert_eq!(gua, Gua8::巽);
 
         // 坎卦
-        gua.reverse(0);
+        gua.reverse(1);
         assert_eq!(gua, Gua8::坎);
 
         // 离卦
-        gua.reverse(0);
         gua.reverse(1);
         gua.reverse(2);
+        gua.reverse(3);
         assert_eq!(gua, Gua8::离);
     }
 
