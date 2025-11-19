@@ -85,3 +85,24 @@ impl Render for GuaResult {
         div().child(self.display())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::gua::basic::{Gua8, Gua64};
+
+    use super::BaGuaCalculator;
+
+    #[test]
+    /**
+     * 测试 calculate_from_two_numbers
+     */
+    fn test_calculate_from_two_numbers() {
+        let r1 = BaGuaCalculator::calculate_from_two_numbers(128, 33);
+        assert_eq!(r1.ben_gua, Gua64::泰);
+        assert_eq!(r1.bian_gua, Gua64::需);
+
+        let r2 = BaGuaCalculator::calculate_from_two_numbers(63, 49);
+        assert_eq!(r2.ben_gua, Gua64::大畜);
+        assert_eq!(r2.bian_gua, Gua64::大有);
+    }
+}
