@@ -18,3 +18,4 @@
 - [gpui](https://www.gpui.rs/)
 - [gpui-component](https://github.com/longbridge/gpui-component)
 - [yijing](https://github.com/freizl/yijing)
+- [chinese-lunisolar-calendar](https://github.com/magiclen/chinese-lunisolar-calendar)
