@@ -23,9 +23,10 @@ impl BaGuaCalculator {
         let xia_num = ichang_mod(num2, 8);
 
         steps.push(GuaResultStep {
-            description: format!("计算上卦和下卦"),
-            origin: format!("数字一：{num1} 数字2：{num2}"),
-            result: format!("上卦为 {num1} % 8 = {shang_num}, 下卦： {num2} % 8 = {xia_num}"),
+            description: format!("计算上卦和下卦").into(),
+            origin: format!("数字一：{num1} 数字2：{num2}").into(),
+            result: format!("上卦为 {num1} % 8 = {shang_num}, 下卦： {num2} % 8 = {xia_num}")
+                .into(),
         });
 
         // 计算本卦
@@ -34,13 +35,14 @@ impl BaGuaCalculator {
         let ben_gua = Gua64::new(shang_gua, xia_gua);
 
         steps.push(GuaResultStep {
-            description: format!("计算本卦"),
+            description: format!("计算本卦").into(),
             origin: format!(
                 "上卦：{}({shang_num}) 下卦：{}({xia_num})",
                 shang_gua.name(),
                 xia_gua.name(),
-            ),
-            result: format!("本卦：{}", ben_gua.name()),
+            )
+            .into(),
+            result: format!("本卦：{}", ben_gua.name()).into(),
         });
 
         // 将两个数字相加取余
@@ -52,15 +54,20 @@ impl BaGuaCalculator {
         bian_gua.change(bian_index);
 
         steps.push(GuaResultStep {
-            description: format!("计算变卦"),
+            description: format!("计算变卦").into(),
             origin: format!(
-                "本卦：{} 变数：({num1} + {num2}) % 6 = {bian_index}",
-                ben_gua.name(),
-            ),
-            result: format!("变卦：{}", bian_gua.name()),
+                "本卦：{} \n变数({num1} + {num2})：{} % 6 = {bian_index}",
+                ben_gua.display(),
+                num1 + num2
+            )
+            .into(),
+            result: format!("变卦：{}", bian_gua.display()).into(),
         });
 
-        GuaResult::new(ben_gua, bian_gua)
+        let mut gua_result = GuaResult::new(ben_gua, bian_gua);
+        gua_result.steps = steps;
+
+        gua_result
     }
 }
 
@@ -89,11 +96,11 @@ pub struct GuaResult {
 #[derive(Clone)]
 pub struct GuaResultStep {
     /// 原始值
-    pub origin: String,
+    pub origin: SharedString,
     /// 操作描述
-    pub description: String,
+    pub description: SharedString,
     /// 结果
-    pub result: String,
+    pub result: SharedString,
 }
 
 impl GuaResult {

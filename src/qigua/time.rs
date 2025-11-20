@@ -199,9 +199,9 @@ impl QiGuaCore for TimeContent {
         let shi_chen = hour_to_shi_chen(hour);
 
         steps.push(GuaResultStep {
-            origin: format!("公历：{year}/{month}/{day} {hour}"),
-            description: format!("将公历转换为农历和时辰"),
-            result: format!("农历：{lunisolar_date}, 时辰: {shi_chen}"),
+            origin: format!("公历：{year}/{month}/{day} {hour}").into(),
+            description: format!("将公历转换为农历和时辰").into(),
+            result: format!("农历：{lunisolar_date}, 时辰: {shi_chen}").into(),
         });
 
         let ba_gua_result = time_to_gua(lunisolar_date, shi_chen, steps);
@@ -229,27 +229,30 @@ fn time_to_gua(
     let year = lunisolar_date.to_lunar_year().to_earthly_branch().ordinal();
 
     steps.push(GuaResultStep {
-        description: format!("转为数字"),
-        origin: format!("农历：{lunisolar_date}"),
+        description: format!("转为数字").into(),
+        origin: format!("农历：{lunisolar_date}").into(),
         result: format!(
             "年：{year}，月：{month}，日：{day} 时辰：{}",
             shi_chen.ordinal()
-        ),
+        )
+        .into(),
     });
 
     let num1 = (year + month + day) as u16;
     let num2 = num1 + shi_chen.ordinal() as u16;
 
     steps.push(GuaResultStep {
-        description: format!("转为计算结果用的数字一和数字二"),
+        description: format!("转为计算结果用的数字一和数字二").into(),
         origin: format!(
             "年：{year}，月：{month}，日：{day} 时辰：{}",
             shi_chen.ordinal()
-        ),
+        )
+        .into(),
         result: format!(
             "num1：{year} + {month} + {day} = {num1}，num2：{num1} + {} = {num2}",
             shi_chen.ordinal()
-        ),
+        )
+        .into(),
     });
 
     let mut gua = BaGuaCalculator::calculate_from_two_numbers(num1, num2);
