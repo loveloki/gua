@@ -12,7 +12,7 @@ use gpui_component::{
 };
 
 use crate::{
-    gua::ba_gua::{BaGuaCalculator, GuaResult},
+    gua::ba_gua::{BaGuaCalculator, GuaResult, GuaResultStep},
     qigua::core::QiGuaCore,
     state::global::GlobalState,
 };
@@ -180,19 +180,31 @@ impl Render for TimeContent {
 
 impl QiGuaCore for TimeContent {
     fn calc_gua(&mut self, cx: &mut Context<Self>) {
+        let mut steps: Vec<GuaResultStep> = vec![];
+
         let date = self.select_time;
 
         let year = date.year();
         let month = date.month();
         let day = date.day();
+        let hour = date.hour();
 
+        // 农历
         let lunisolar_date = LunisolarDate::from_solar_date(
             SolarDate::from_ymd(year as u16, month as u8, day as u8).unwrap(),
         )
         .unwrap();
 
-        let shi_chen = hour_to_shi_chen(self.select_time.hour());
-        let ba_gua_result = time_to_gua(lunisolar_date, shi_chen);
+        // 时辰
+        let shi_chen = hour_to_shi_chen(hour);
+
+        steps.push(GuaResultStep {
+            origin: format!("公历：{year}/{month}/{day} {hour}"),
+            description: format!("将公历转换为农历和时辰"),
+            result: format!("农历：{lunisolar_date}, 时辰: {shi_chen}"),
+        });
+
+        let ba_gua_result = time_to_gua(lunisolar_date, shi_chen, steps);
 
         let gua_result = GlobalState::state_mut(cx);
         gua_result.result = Some(ba_gua_result.clone());
@@ -207,15 +219,45 @@ impl QiGuaCore for TimeContent {
 /**
  * 根据时间计算卦象
  */
-fn time_to_gua(lunisolar_date: LunisolarDate, shi_chen: EarthlyBranch) -> GuaResult {
+fn time_to_gua(
+    lunisolar_date: LunisolarDate,
+    shi_chen: EarthlyBranch,
+    mut steps: Vec<GuaResultStep>,
+) -> GuaResult {
     let day = lunisolar_date.to_lunar_day().to_u8();
     let month = lunisolar_date.to_lunar_month().to_u8_raw();
     let year = lunisolar_date.to_lunar_year().to_earthly_branch().ordinal();
 
+    steps.push(GuaResultStep {
+        description: format!("转为数字"),
+        origin: format!("农历：{lunisolar_date}"),
+        result: format!(
+            "年：{year}，月：{month}，日：{day} 时辰：{}",
+            shi_chen.ordinal()
+        ),
+    });
+
     let num1 = (year + month + day) as u16;
     let num2 = num1 + shi_chen.ordinal() as u16;
 
-    BaGuaCalculator::calculate_from_two_numbers(num1, num2)
+    steps.push(GuaResultStep {
+        description: format!("转为计算结果用的数字一和数字二"),
+        origin: format!(
+            "年：{year}，月：{month}，日：{day} 时辰：{}",
+            shi_chen.ordinal()
+        ),
+        result: format!(
+            "num1：{year} + {month} + {day} = {num1}，num2：{num1} + {} = {num2}",
+            shi_chen.ordinal()
+        ),
+    });
+
+    let mut gua = BaGuaCalculator::calculate_from_two_numbers(num1, num2);
+
+    // 合并所有的操作步骤记录
+    gua.steps.splice(0..0, steps);
+
+    gua
 }
 
 /**

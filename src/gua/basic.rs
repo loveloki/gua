@@ -494,7 +494,7 @@ impl Gua64 {
     pub const 未济: Gua64 = Gua64::new(Gua8::离, Gua8::坎);
 
     pub const fn new(shang: Gua8, xia: Gua8) -> Self {
-        let name = Self::name(shang, xia);
+        let name = Self::parse_name(shang, xia);
 
         Self { shang, xia, name }
     }
@@ -502,7 +502,7 @@ impl Gua64 {
     /**
      * 根据上下卦获得卦象名称
      */
-    pub const fn name(shang: Gua8, xia: Gua8) -> SharedString {
+    pub const fn parse_name(shang: Gua8, xia: Gua8) -> SharedString {
         match (shang, xia) {
             (Gua8::乾, Gua8::乾) => SharedString::new_static("乾"),
             (Gua8::坤, Gua8::坤) => SharedString::new_static("坤"),
@@ -571,6 +571,11 @@ impl Gua64 {
         }
     }
 
+    /// 获取卦名
+    pub fn name(&self) -> SharedString {
+        self.name.clone()
+    }
+
     pub fn display(&self) -> SharedString {
         let shang = self.shang.name();
         let xia = self.xia.name();
@@ -597,7 +602,7 @@ impl Gua64 {
             _ => !unreachable!("变卦的爻只能是 1 到 6"),
         }
 
-        self.name = Self::name(self.shang, self.xia);
+        self.name = Self::parse_name(self.shang, self.xia);
     }
 }
 
