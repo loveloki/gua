@@ -1,3 +1,5 @@
+use std::sync::LazyLock;
+
 use gpui::{AppContext, Application, TitlebarOptions, WindowOptions};
 use gpui_component::Root;
 
@@ -10,6 +12,14 @@ mod gua;
 mod qigua;
 mod state;
 mod ui;
+
+static RUNTIME: LazyLock<tokio::runtime::Runtime> = LazyLock::new(|| {
+    tokio::runtime::Builder::new_multi_thread()
+        .enable_all()
+        .worker_threads(1)
+        .build()
+        .unwrap()
+});
 
 fn main() {
     let app = Application::new().with_assets(Assets);
