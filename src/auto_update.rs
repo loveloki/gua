@@ -56,8 +56,8 @@ pub fn init(cx: &mut App) {
 
         let updater = AutoUpdater::new(current_version);
 
-        // 暂时禁用自动更新，等异步请求处理后再开启
-        // updater.start_polling(cx).detach();
+        // 检查更新
+        updater.start_polling(cx).detach();
 
         updater
     });
@@ -164,10 +164,18 @@ impl AutoUpdater {
         println!("执行 update");
         let current_version = this.read_with(cx, |this, _| this.current_version)?;
 
-        let release = ureq::get(RELEASE_URL)
-            .call()?
-            .body_mut()
-            .read_json::<GithubRelease>()?;
+        let release = crate::RUNTIME
+            .spawn(async move {
+                let release = reqwest::get(RELEASE_URL)
+                    .await?
+                    .json::<GithubRelease>()
+                    .await?;
+
+                Ok(release)
+            })
+            .await??;
+
+        println!("body = {release:?}");
 
         let tag_name = release.tag_name.clone().split_off(1);
 
