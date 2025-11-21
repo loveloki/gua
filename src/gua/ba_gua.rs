@@ -1,7 +1,7 @@
 use std::fmt::Debug;
 
+use chrono::{DateTime, Local};
 use gpui::{Context, IntoElement, ParentElement, Render, SharedString, Window, div};
-use time::{OffsetDateTime, macros::format_description};
 
 use crate::gua::basic::{Gua8, Gua64, ichang_mod};
 
@@ -89,7 +89,7 @@ pub struct GuaResult {
     /**
      * 算卦时间
      */
-    pub date: OffsetDateTime,
+    pub date: DateTime<Local>,
 
     /// 计算过程
     pub steps: Vec<GuaResultStep>,
@@ -107,7 +107,7 @@ pub struct GuaResultStep {
 
 impl GuaResult {
     pub fn new(ben_gua: Gua64, bian_gua: Gua64) -> Self {
-        let date = OffsetDateTime::now_local().unwrap();
+        let date = Local::now();
         let steps = vec![];
 
         GuaResult {
@@ -122,10 +122,10 @@ impl GuaResult {
         let ben_gua = self.ben_gua.display();
         let bian_gua = self.bian_gua.display();
 
-        let custom_format = format_description!(
-            "[year] 年 [month padding:zero] 月 [day padding:zero] 日 [hour padding:zero] 时 [minute padding:zero] 分"
-        );
-        let parsed_date = self.date.format(custom_format).unwrap();
+        let parsed_date = self
+            .date
+            .format("%Y 年 %m 月 %d 日 %H 时 %M 分")
+            .to_string();
 
         format!(
             "本卦：{}\n变卦：{}\n 算卦时间：{}",
