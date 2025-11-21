@@ -1,22 +1,24 @@
 use anyhow::{Ok, Result};
 use gpui::{App, AppContext, AsyncApp, Context, Entity, Global, SemanticVersion, Task, Window};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::{
     env::consts::{ARCH, OS},
     str::FromStr,
     time::Duration,
 };
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct GithubRelease {
     pub tag_name: String,
+    #[serde(default)]
     pub assets: Vec<GithubReleaseAsset>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct GithubReleaseAsset {
     pub name: String,
     pub browser_download_url: String,
+    #[serde(default)]
     pub digest: Option<String>,
 }
 
@@ -164,21 +166,9 @@ impl AutoUpdater {
         println!("执行 update");
         let current_version = this.read_with(cx, |this, _| this.current_version)?;
 
-        let release = crate::RUNTIME
-            .spawn(async move {
-                let release = reqwest::get(RELEASE_URL)
-                    .await?
-                    .json::<GithubRelease>()
-                    .await?;
-
-                Ok(release)
-            })
-            .await??;
-
-        println!("body = {release:?}");
+        let release = crate::RUNTIME.spawn(fetch_release()).await??;
 
         let tag_name = release.tag_name.clone().split_off(1);
-
         let remote_version = SemanticVersion::from_str(&tag_name)?;
 
         println!("remote_version {}", remote_version);
@@ -217,13 +207,6 @@ impl AutoUpdater {
  * 根据操作系统和架构获取下载文件名
  */
 fn get_download_filename() -> Result<String> {
-    // let os = match OS {
-    //     "macos" => Ok("gua"),
-    //     "windows" => Ok("gua"),
-    //     "linux" => Ok("gua"),
-    //     unsupported_os => anyhow::bail!("not supported: {unsupported_os}"),
-    // }?;
-
     print!("操作系统为：{OS}");
 
     let arch = match ARCH {
@@ -244,4 +227,18 @@ fn get_download_filename() -> Result<String> {
     println!("文件名：{filename}");
 
     Ok(filename.into())
+}
+
+/// 获取最新 release 信息
+async fn fetch_release() -> Result<GithubRelease> {
+    let client = reqwest::Client::new();
+
+    client
+        .get(RELEASE_URL)
+        .header("User-Agent", "gua-client")
+        .send()
+        .await?
+        .json::<GithubRelease>()
+        .await
+        .map_err(Into::into)
 }
