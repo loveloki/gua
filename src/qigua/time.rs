@@ -216,9 +216,7 @@ impl QiGuaCore for TimeContent {
     }
 }
 
-/**
- * 根据时间计算卦象
- */
+/// 根据时间计算卦象
 fn time_to_gua(
     lunisolar_date: LunisolarDate,
     shi_chen: EarthlyBranch,
@@ -238,24 +236,24 @@ fn time_to_gua(
         .into(),
     });
 
-    let num1 = (year + month + day) as u16;
-    let num2 = num1 + shi_chen.ordinal() as u16;
+    let shang_num = (year + month + day) as u16;
+    let xia_num = shang_num + shi_chen.ordinal() as u16;
 
     steps.push(GuaResultStep {
-        description: format!("转为计算结果用的数字一和数字二").into(),
+        description: format!("转为计算上卦和下卦的数字").into(),
         origin: format!(
             "年：{year}，月：{month}，日：{day} 时辰：{}",
             shi_chen.ordinal()
         )
         .into(),
         result: format!(
-            "num1：{year} + {month} + {day} = {num1}，num2：{num1} + {} = {num2}",
+            "num1：{year} + {month} + {day} = {shang_num}，num2：{shang_num} + {} = {xia_num}",
             shi_chen.ordinal()
         )
         .into(),
     });
 
-    let mut gua = BaGuaCalculator::calculate_from_two_numbers(num1, num2);
+    let mut gua = BaGuaCalculator::calculate_from_two_numbers(shang_num, xia_num, xia_num);
 
     // 合并所有的操作步骤记录
     gua.steps.splice(0..0, steps);
@@ -263,9 +261,7 @@ fn time_to_gua(
     gua
 }
 
-/**
- * 根据小时获取时辰
- */
+/// 根据小时获取时辰
 fn hour_to_shi_chen(hour: u32) -> EarthlyBranch {
     match hour {
         23 | 0 => EarthlyBranch::First,     // 子时: 23:00-01:00
@@ -281,5 +277,26 @@ fn hour_to_shi_chen(hour: u32) -> EarthlyBranch {
         19 | 20 => EarthlyBranch::Eleventh, // 戌时: 19:00-21:00
         21 | 22 => EarthlyBranch::Twelfth,  // 亥时: 21:00-23:00
         _ => unreachable!("hour must be 0-23"),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::gua::basic::Gua64;
+    use chinese_lunisolar_calendar::{EarthlyBranch, LunisolarDate, SolarDate};
+
+    use super::time_to_gua;
+
+    #[test]
+    /// 测试 time_to_gua
+    fn test_time_to_gua() {
+        let r1 = time_to_gua(
+            LunisolarDate::from_solar_date(SolarDate::from_ymd(2025, 11, 22).unwrap()).unwrap(),
+            EarthlyBranch::Fifth,
+            vec![],
+        );
+
+        assert_eq!(r1.ben_gua, Gua64::晋);
+        assert_eq!(r1.bian_gua, Gua64::豫);
     }
 }

@@ -91,10 +91,11 @@ impl Render for InputTwoNumContent {
 
 impl QiGuaCore for InputTwoNumContent {
     fn calc_gua(&mut self, cx: &mut Context<Self>) {
-        let value1: u16 = self.input1_state.read(cx).value().parse().unwrap_or(0);
-        let value2: u16 = self.input2_state.read(cx).value().parse().unwrap_or(0);
+        let shang_num: u16 = self.input1_state.read(cx).value().parse().unwrap_or(0);
+        let xia_num: u16 = self.input2_state.read(cx).value().parse().unwrap_or(0);
 
-        let ba_gua_result = BaGuaCalculator::calculate_from_two_numbers(value1, value2);
+        let ba_gua_result =
+            BaGuaCalculator::calculate_from_two_numbers(shang_num, xia_num, shang_num + xia_num);
 
         let gua_result = GlobalState::state_mut(cx);
         gua_result.result = Some(ba_gua_result.clone());
