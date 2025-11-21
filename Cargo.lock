@@ -2515,7 +2515,7 @@ checksum = "12101ecc8225ea6d675bc70263074eab6169079621c2186fe0c66590b2df9681"
 
 [[package]]
 name = "gua"
-version = "0.1.9"
+version = "0.1.10"
 dependencies = [
  "anyhow",
  "chinese-lunisolar-calendar",
