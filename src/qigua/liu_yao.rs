@@ -1,3 +1,12 @@
+use crate::{
+    gua::{
+        ba_gua::{GuaResult, GuaResultStep},
+        basic::{Gua8, Gua64, Gua64YaoIndex},
+        yao::Yao,
+    },
+    qigua::core::QiGuaCore,
+    state::global::GlobalState,
+};
 use gpui::{
     App, AppContext, Context, Entity, IntoElement, ParentElement, Render, SharedString, Styled,
     Subscription, Window, div,
@@ -10,8 +19,8 @@ use gpui_component::{
     select::{Select, SelectEvent, SelectState},
     v_flex,
 };
-
-use crate::qigua::core::QiGuaCore;
+use std::str::FromStr;
+use strum::{Display, EnumString};
 
 const NAME: &str = "六爻";
 
@@ -91,6 +100,57 @@ impl LiuYaoContent {
             && self.second_yao.read(cx).is_selected
             && self.first_yao.read(cx).is_selected
     }
+
+    /// 获取变卦
+    ///
+    /// 当和本卦相同的时候返回 None
+    fn bian_gua(
+        &mut self,
+        ben_gua: &Gua64,
+        first: LiuYaoType,
+        second: LiuYaoType,
+        third: LiuYaoType,
+        fourth: LiuYaoType,
+        fifth: LiuYaoType,
+        sixth: LiuYaoType,
+    ) -> Option<Gua64> {
+        let mut bian_gua = ben_gua.clone();
+
+        let is_dong = first.is_dong();
+        if is_dong {
+            bian_gua.change(Gua64YaoIndex::First);
+        }
+
+        let is_dong = second.is_dong();
+        if is_dong {
+            bian_gua.change(Gua64YaoIndex::Second);
+        }
+
+        let is_dong = third.is_dong();
+        if is_dong {
+            bian_gua.change(Gua64YaoIndex::Third);
+        }
+
+        let is_dong = fourth.is_dong();
+        if is_dong {
+            bian_gua.change(Gua64YaoIndex::Fourth);
+        }
+
+        let is_dong = fifth.is_dong();
+        if is_dong {
+            bian_gua.change(Gua64YaoIndex::Fifth);
+        }
+
+        let is_dong = sixth.is_dong();
+        if is_dong {
+            bian_gua.change(Gua64YaoIndex::Sixth);
+        }
+
+        match ben_gua.eq(&bian_gua) {
+            true => None,
+            false => Some(bian_gua),
+        }
+    }
 }
 
 impl Render for LiuYaoContent {
@@ -121,7 +181,85 @@ impl Render for LiuYaoContent {
 }
 
 impl QiGuaCore for LiuYaoContent {
-    fn calc_gua(&mut self, cx: &mut Context<Self>) {}
+    fn calc_gua(&mut self, cx: &mut Context<Self>) {
+        let mut steps: Vec<GuaResultStep> = vec![];
+
+        // 计算本卦
+        let first = self.first_yao.read(cx).yao.clone().unwrap();
+        let second = self.second_yao.read(cx).yao.clone().unwrap();
+        let third = self.third_yao.read(cx).yao.clone().unwrap();
+        let fourth = self.fourth_yao.read(cx).yao.clone().unwrap();
+        let fifth = self.fifth_yao.read(cx).yao.clone().unwrap();
+        let sixth = self.sixth_yao.read(cx).yao.clone().unwrap();
+
+        let shang = Gua8::new(
+            LiuYaoType::yao(fourth),
+            LiuYaoType::yao(fifth),
+            LiuYaoType::yao(sixth),
+        );
+        let xia = Gua8::new(
+            LiuYaoType::yao(first),
+            LiuYaoType::yao(second),
+            LiuYaoType::yao(third),
+        );
+
+        steps.push(GuaResultStep {
+            description: format!("计算上卦和下卦").into(),
+            origin: format!(
+                "上爻：{sixth}，五爻：{fifth}，四爻：{fourth}， 三爻: {third}, 二爻: {second}, 初爻: {first}",
+            )
+            .into(),
+            result: format!("上卦：{}，下卦：{}", shang.name(), xia.name()).into(),
+        });
+
+        let ben_gua = Gua64::new(shang, xia);
+
+        steps.push(GuaResultStep {
+            description: format!("计算本卦").into(),
+            origin: format!("上卦：{}，下卦：{}", shang.name(), xia.name()).into(),
+            result: format!("本卦：{}", ben_gua.name()).into(),
+        });
+
+        // 计算变卦
+        // 需要检查每一个爻，是否是动爻，对动幺进行翻转
+        let bian_gua = self.bian_gua(&ben_gua, first, second, third, fourth, fifth, sixth);
+
+        match bian_gua.clone() {
+            None => {
+                steps.push(GuaResultStep {
+                    description: format!("计算变卦").into(),
+                    origin: format!("本卦：{}", ben_gua.display()).into(),
+                    result: format!("不存在动爻，没有变卦").into(),
+                });
+            }
+            Some(bian_gua) => {
+                steps.push(GuaResultStep {
+                    description: format!("计算变卦").into(),
+                    origin: format!("本卦：{}", ben_gua.display()).into(),
+                    result: format!("变卦：{}", bian_gua.display()).into(),
+                });
+            }
+        }
+
+        // 计算互卦
+        // 互卦
+        let hu_gua = ben_gua.hu_gua();
+
+        steps.push(GuaResultStep {
+            description: format!("计算互卦").into(),
+            origin: format!("本卦：{}", ben_gua.display(),).into(),
+            result: format!("互卦：{}", hu_gua.display()).into(),
+        });
+
+        let mut ba_gua_result = GuaResult::new(ben_gua, bian_gua, hu_gua);
+        ba_gua_result.steps = steps;
+
+        let gua_result = GlobalState::state_mut(cx);
+        gua_result.result = Some(ba_gua_result.clone());
+
+        cx.notify();
+    }
+
     fn name() -> SharedString {
         NAME.into()
     }
@@ -130,15 +268,41 @@ impl QiGuaCore for LiuYaoContent {
 /// 爻的类型
 ///
 /// 用于六爻起卦，所以需要四种
+#[derive(Debug, PartialEq, EnumString, Display, Clone, Copy)]
 enum LiuYaoType {
     /// 阴
+    #[strum(serialize = "阴")]
     Yin,
     /// 阳
+    #[strum(serialize = "阳")]
     Yang,
     /// 动阴
+    #[strum(serialize = "动阴")]
     DongYin,
     /// 动阳
+    #[strum(serialize = "动阳")]
     DongYang,
+}
+
+impl LiuYaoType {
+    /// 转换为 Yao
+    ///
+    /// * `阴` 和 `动阴` 转为 `阴`
+    /// * `阳` 和 `动阳` 转为 `阳`
+    pub const fn yao(self) -> Yao {
+        match self {
+            LiuYaoType::Yin | LiuYaoType::DongYin => Yao::阴,
+            LiuYaoType::Yang | LiuYaoType::DongYang => Yao::阳,
+        }
+    }
+
+    /// 是否是动幺
+    pub fn is_dong(self) -> bool {
+        match self {
+            LiuYaoType::DongYin | LiuYaoType::DongYang => true,
+            _ => false,
+        }
+    }
 }
 
 /// 单个爻的选择（以及随机生成）UI
@@ -149,6 +313,9 @@ struct SingalYaoSelect {
     is_selected: bool,
     /// 爻的名称前缀
     title_prefix: SharedString,
+    /// 爻的类型
+    yao: Option<LiuYaoType>,
+    /// 订阅
     _subscribe: Vec<Subscription>,
 }
 
@@ -165,8 +332,15 @@ impl SingalYaoSelect {
             &select_state,
             |this, _, event: &SelectEvent<Vec<&'static str>>, _| match event {
                 SelectEvent::Confirm(value) => match value {
-                    None => this.is_selected = false,
-                    Some(_) => this.is_selected = true,
+                    None => {
+                        this.is_selected = false;
+                        this.yao = None;
+                    }
+                    Some(s) => {
+                        this.is_selected = true;
+
+                        this.yao = Some(LiuYaoType::from_str(s).unwrap());
+                    }
                 },
             },
         )];
@@ -175,13 +349,14 @@ impl SingalYaoSelect {
             select_state,
             is_selected: false,
             title_prefix,
+            yao: None,
             _subscribe,
         }
     }
 }
 
 impl Render for SingalYaoSelect {
-    fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         h_flex()
             .w_full()
             .gap_1()
