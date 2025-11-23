@@ -66,29 +66,32 @@ impl BaGuaCalculator {
             result: format!("变卦：{}", bian_gua.display()).into(),
         });
 
-        let mut gua_result = GuaResult::new(ben_gua, bian_gua);
+        // 互卦
+        let hu_gua = ben_gua.hu_gua();
+
+        steps.push(GuaResultStep {
+            description: format!("计算互卦").into(),
+            origin: format!("本卦：{}", ben_gua.display(),).into(),
+            result: format!("互卦：{}", hu_gua.display()).into(),
+        });
+
+        let mut gua_result = GuaResult::new(ben_gua, bian_gua, hu_gua);
         gua_result.steps = steps;
 
         gua_result
     }
 }
 
-/**
- * 算卦结果
- */
+/// 算卦结果
 #[derive(Clone)]
 pub struct GuaResult {
-    /**
-     * 本卦
-     */
+    /// 本卦
     pub ben_gua: Gua64,
-    /**
-     * 变卦
-     */
+    /// 变卦
     pub bian_gua: Gua64,
-    /**
-     * 算卦时间
-     */
+    /// 互挂
+    pub hu_gua: Gua64,
+    /// 算卦时间
     pub date: DateTime<Local>,
 
     /// 计算过程
@@ -106,7 +109,7 @@ pub struct GuaResultStep {
 }
 
 impl GuaResult {
-    pub fn new(ben_gua: Gua64, bian_gua: Gua64) -> Self {
+    pub fn new(ben_gua: Gua64, bian_gua: Gua64, hu_gua: Gua64) -> Self {
         let date = Local::now();
         let steps = vec![];
 
@@ -114,6 +117,7 @@ impl GuaResult {
             date,
             ben_gua,
             bian_gua,
+            hu_gua,
             steps,
         }
     }
@@ -121,6 +125,7 @@ impl GuaResult {
     pub fn display(&self) -> SharedString {
         let ben_gua = self.ben_gua.display();
         let bian_gua = self.bian_gua.display();
+        let hu_gua = self.hu_gua.display();
 
         let parsed_date = self
             .date
@@ -128,8 +133,8 @@ impl GuaResult {
             .to_string();
 
         format!(
-            "本卦：{}\n变卦：{}\n 算卦时间：{}",
-            ben_gua, bian_gua, parsed_date
+            "本卦：{}\n变卦：{}\n互卦：{}\n算卦时间：{}",
+            ben_gua, bian_gua, hu_gua, parsed_date
         )
         .into()
     }
@@ -155,9 +160,11 @@ mod tests {
         let r1 = BaGuaCalculator::calculate_from_two_numbers(128, 33, 128 + 33);
         assert_eq!(r1.ben_gua, Gua64::泰);
         assert_eq!(r1.bian_gua, Gua64::需);
+        assert_eq!(r1.hu_gua, Gua64::归妹);
 
         let r2 = BaGuaCalculator::calculate_from_two_numbers(63, 49, 63 + 49);
         assert_eq!(r2.ben_gua, Gua64::大畜);
         assert_eq!(r2.bian_gua, Gua64::大有);
+        assert_eq!(r2.hu_gua, Gua64::归妹);
     }
 }

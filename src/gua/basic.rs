@@ -150,6 +150,23 @@ impl Gua8 {
     }
 }
 
+/// 64 卦爻的顺序
+/// 注意爻的顺序是从下往上
+enum Gua64_Yao_Index {
+    /// 一爻
+    First = 1,
+    /// 二爻
+    Second,
+    /// 三爻
+    Third,
+    /// 四爻
+    Fourth,
+    /// 五爻
+    Fifth,
+    /// 六爻
+    Sixth,
+}
+
 /**
  * 六爻卦
  * 由 三爻卦 组合而成，共 64 种
@@ -497,6 +514,40 @@ impl Gua64 {
         let name = Self::parse_name(shang, xia);
 
         Self { shang, xia, name }
+    }
+
+    /// 根据索引获取爻
+    /// 从下往上数，共六个
+    pub const fn yao(&self, index: Gua64_Yao_Index) -> Yao {
+        match index {
+            Gua64_Yao_Index::First => self.xia.yao3,
+            Gua64_Yao_Index::Second => self.xia.yao2,
+            Gua64_Yao_Index::Third => self.xia.yao1,
+            Gua64_Yao_Index::Fourth => self.shang.yao3,
+            Gua64_Yao_Index::Fifth => self.shang.yao2,
+            Gua64_Yao_Index::Sixth => self.shang.yao1,
+        }
+    }
+
+    /// 获取互卦
+    ///
+    /// # 注释
+    /// * 三四五爻作为上卦
+    /// * 二三四爻作为下卦
+    pub const fn hu_gua(&self) -> Self {
+        let shang = Gua8::new(
+            self.yao(Gua64_Yao_Index::Fifth),
+            self.yao(Gua64_Yao_Index::Fourth),
+            self.yao(Gua64_Yao_Index::Third),
+        );
+
+        let xia = Gua8::new(
+            self.yao(Gua64_Yao_Index::Fourth),
+            self.yao(Gua64_Yao_Index::Third),
+            self.yao(Gua64_Yao_Index::Second),
+        );
+
+        Self::new(shang, xia)
     }
 
     /**
