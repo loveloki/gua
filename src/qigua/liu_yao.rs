@@ -100,57 +100,6 @@ impl LiuYaoContent {
             && self.second_yao.read(cx).is_selected
             && self.first_yao.read(cx).is_selected
     }
-
-    /// 获取变卦
-    ///
-    /// 当和本卦相同的时候返回 None
-    fn bian_gua(
-        &mut self,
-        ben_gua: &Gua64,
-        first: LiuYaoType,
-        second: LiuYaoType,
-        third: LiuYaoType,
-        fourth: LiuYaoType,
-        fifth: LiuYaoType,
-        sixth: LiuYaoType,
-    ) -> Option<Gua64> {
-        let mut bian_gua = ben_gua.clone();
-
-        let is_dong = first.is_dong();
-        if is_dong {
-            bian_gua.change(Gua64YaoIndex::First);
-        }
-
-        let is_dong = second.is_dong();
-        if is_dong {
-            bian_gua.change(Gua64YaoIndex::Second);
-        }
-
-        let is_dong = third.is_dong();
-        if is_dong {
-            bian_gua.change(Gua64YaoIndex::Third);
-        }
-
-        let is_dong = fourth.is_dong();
-        if is_dong {
-            bian_gua.change(Gua64YaoIndex::Fourth);
-        }
-
-        let is_dong = fifth.is_dong();
-        if is_dong {
-            bian_gua.change(Gua64YaoIndex::Fifth);
-        }
-
-        let is_dong = sixth.is_dong();
-        if is_dong {
-            bian_gua.change(Gua64YaoIndex::Sixth);
-        }
-
-        match ben_gua.eq(&bian_gua) {
-            true => None,
-            false => Some(bian_gua),
-        }
-    }
 }
 
 impl Render for LiuYaoContent {
@@ -184,7 +133,6 @@ impl QiGuaCore for LiuYaoContent {
     fn calc_gua(&mut self, cx: &mut Context<Self>) {
         let mut steps: Vec<GuaResultStep> = vec![];
 
-        // 计算本卦
         let first = self.first_yao.read(cx).yao.clone().unwrap();
         let second = self.second_yao.read(cx).yao.clone().unwrap();
         let third = self.third_yao.read(cx).yao.clone().unwrap();
@@ -192,37 +140,14 @@ impl QiGuaCore for LiuYaoContent {
         let fifth = self.fifth_yao.read(cx).yao.clone().unwrap();
         let sixth = self.sixth_yao.read(cx).yao.clone().unwrap();
 
-        let shang = Gua8::new(
-            LiuYaoType::yao(fourth),
-            LiuYaoType::yao(fifth),
-            LiuYaoType::yao(sixth),
-        );
-        let xia = Gua8::new(
-            LiuYaoType::yao(first),
-            LiuYaoType::yao(second),
-            LiuYaoType::yao(third),
-        );
+        // 计算本卦
+        let (ben_gua, steps2) = ben_gua(first, second, third, fourth, fifth, sixth);
 
-        steps.push(GuaResultStep {
-            description: format!("计算上卦和下卦").into(),
-            origin: format!(
-                "上爻：{sixth}，五爻：{fifth}，四爻：{fourth}， 三爻: {third}, 二爻: {second}, 初爻: {first}",
-            )
-            .into(),
-            result: format!("上卦：{}，下卦：{}", shang.name(), xia.name()).into(),
-        });
-
-        let ben_gua = Gua64::new(shang, xia);
-
-        steps.push(GuaResultStep {
-            description: format!("计算本卦").into(),
-            origin: format!("上卦：{}，下卦：{}", shang.name(), xia.name()).into(),
-            result: format!("本卦：{}", ben_gua.name()).into(),
-        });
+        steps.append(&mut steps2.clone());
 
         // 计算变卦
         // 需要检查每一个爻，是否是动爻，对动幺进行翻转
-        let bian_gua = self.bian_gua(&ben_gua, first, second, third, fourth, fifth, sixth);
+        let bian_gua = bian_gua(&ben_gua, first, second, third, fourth, fifth, sixth);
 
         match bian_gua.clone() {
             None => {
@@ -362,5 +287,140 @@ impl Render for SingalYaoSelect {
             .gap_1()
             .child(Label::new(self.title_prefix.clone()))
             .child(Select::new(&self.select_state).placeholder("选择爻象"))
+    }
+}
+
+/// 获取变卦
+///
+/// 当和本卦相同的时候返回 None
+fn bian_gua(
+    ben_gua: &Gua64,
+    first: LiuYaoType,
+    second: LiuYaoType,
+    third: LiuYaoType,
+    fourth: LiuYaoType,
+    fifth: LiuYaoType,
+    sixth: LiuYaoType,
+) -> Option<Gua64> {
+    let mut bian_gua = ben_gua.clone();
+
+    let is_dong = first.is_dong();
+    if is_dong {
+        bian_gua.change(Gua64YaoIndex::First);
+    }
+
+    let is_dong = second.is_dong();
+    if is_dong {
+        bian_gua.change(Gua64YaoIndex::Second);
+    }
+
+    let is_dong = third.is_dong();
+    if is_dong {
+        bian_gua.change(Gua64YaoIndex::Third);
+    }
+
+    let is_dong = fourth.is_dong();
+    if is_dong {
+        bian_gua.change(Gua64YaoIndex::Fourth);
+    }
+
+    let is_dong = fifth.is_dong();
+    if is_dong {
+        bian_gua.change(Gua64YaoIndex::Fifth);
+    }
+
+    let is_dong = sixth.is_dong();
+    if is_dong {
+        bian_gua.change(Gua64YaoIndex::Sixth);
+    }
+
+    match ben_gua.eq(&bian_gua) {
+        true => None,
+        false => Some(bian_gua),
+    }
+}
+
+/// 获取本卦
+fn ben_gua(
+    first: LiuYaoType,
+    second: LiuYaoType,
+    third: LiuYaoType,
+    fourth: LiuYaoType,
+    fifth: LiuYaoType,
+    sixth: LiuYaoType,
+) -> (Gua64, Vec<GuaResultStep>) {
+    let mut steps: Vec<GuaResultStep> = vec![];
+
+    let shang = Gua8::new(
+        LiuYaoType::yao(fourth),
+        LiuYaoType::yao(fifth),
+        LiuYaoType::yao(sixth),
+    );
+    let xia = Gua8::new(
+        LiuYaoType::yao(first),
+        LiuYaoType::yao(second),
+        LiuYaoType::yao(third),
+    );
+
+    steps.push(GuaResultStep {
+        description: format!("计算上卦和下卦").into(),
+        origin: format!(
+            "上爻：{sixth}，五爻：{fifth}，四爻：{fourth}， 三爻: {third}, 二爻: {second}, 初爻: {first}",
+        )
+        .into(),
+        result: format!("上卦：{}，下卦：{}", shang.name(), xia.name()).into(),
+    });
+
+    let ben_gua = Gua64::new(shang, xia);
+
+    steps.push(GuaResultStep {
+        description: format!("计算本卦").into(),
+        origin: format!("上卦：{}，下卦：{}", shang.name(), xia.name()).into(),
+        result: format!("本卦：{}", ben_gua.name()).into(),
+    });
+
+    (ben_gua, steps)
+}
+
+mod tests {
+    use super::*;
+
+    #[test]
+    /// 测试六爻算卦结果
+    fn test_liu_yao() {
+        let first = LiuYaoType::Yang;
+        let second = LiuYaoType::Yin;
+        let third = LiuYaoType::DongYang;
+        let fourth = LiuYaoType::DongYin;
+        let fifth = LiuYaoType::Yang;
+        let sixth = LiuYaoType::Yang;
+
+        // 计算本卦
+        let (ben_gua_result, _) = ben_gua(first, second, third, fourth, fifth, sixth);
+
+        // 计算变卦
+        let bian_gua_result = bian_gua(&ben_gua_result, first, second, third, fourth, fifth, sixth);
+
+        let hu_gua_result = ben_gua_result.hu_gua();
+
+        assert_eq!(ben_gua_result, Gua64::家人);
+        assert_eq!(bian_gua_result.unwrap(), Gua64::无妄);
+        assert_eq!(hu_gua_result, Gua64::未济);
+
+        // 测试没有变卦的结果
+        let third = LiuYaoType::Yang;
+        let fourth = LiuYaoType::Yin;
+
+        // 计算本卦
+        let (ben_gua_result, _) = ben_gua(first, second, third, fourth, fifth, sixth);
+
+        // 计算变卦
+        let bian_gua_result = bian_gua(&ben_gua_result, first, second, third, fourth, fifth, sixth);
+
+        let hu_gua_result = ben_gua_result.hu_gua();
+
+        assert_eq!(ben_gua_result, Gua64::家人);
+        assert_eq!(bian_gua_result.is_none(), true);
+        assert_eq!(hu_gua_result, Gua64::未济);
     }
 }
