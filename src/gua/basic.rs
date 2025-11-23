@@ -47,15 +47,19 @@ impl Render for Gua64Info {
     }
 }
 
-/**
- * 三爻卦
- * 三个爻为一个卦，共有八个，即八卦
- */
+/// 八卦
+/// 三个爻为一个卦，共有八个，即八卦
+///
+/// # 注意
+/// 爻的顺序是从下到上的，所以初爻是最下面的
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Gua8 {
-    pub yao1: Yao,
-    pub yao2: Yao,
-    pub yao3: Yao,
+    /// 初爻，即一爻
+    pub first_yao: Yao,
+    /// 二爻
+    pub second_yao: Yao,
+    /// 三爻
+    pub third_yao: Yao,
 }
 
 impl Gua8 {
@@ -66,7 +70,7 @@ impl Gua8 {
     /**
      * 兑
      */
-    pub const 兑: Gua8 = Gua8::new(Yao::阴, Yao::阳, Yao::阳);
+    pub const 兑: Gua8 = Gua8::new(Yao::阳, Yao::阳, Yao::阴);
     /**
      * 离
      */
@@ -74,12 +78,12 @@ impl Gua8 {
     /**
      * 震
      */
-    pub const 震: Gua8 = Gua8::new(Yao::阴, Yao::阴, Yao::阳);
+    pub const 震: Gua8 = Gua8::new(Yao::阳, Yao::阴, Yao::阴);
 
     /**
      * 巽
      */
-    pub const 巽: Gua8 = Gua8::new(Yao::阳, Yao::阳, Yao::阴);
+    pub const 巽: Gua8 = Gua8::new(Yao::阴, Yao::阳, Yao::阳);
 
     /**
      * 坎
@@ -89,29 +93,37 @@ impl Gua8 {
     /**
      * 艮
      */
-    pub const 艮: Gua8 = Gua8::new(Yao::阳, Yao::阴, Yao::阴);
+    pub const 艮: Gua8 = Gua8::new(Yao::阴, Yao::阴, Yao::阳);
 
     /**
      * 坤
      */
     pub const 坤: Gua8 = Gua8::new(Yao::阴, Yao::阴, Yao::阴);
 
-    pub const fn new(yao1: Yao, yao2: Yao, yao3: Yao) -> Self {
-        Self { yao1, yao2, yao3 }
+    /// 根据三个爻创建新的八卦
+    ///
+    /// # 注意
+    /// 爻的顺序是从下到上，所以初爻在最下面
+    pub const fn new(first_yao: Yao, second_yao: Yao, third_yao: Yao) -> Self {
+        Self {
+            third_yao,
+            second_yao,
+            first_yao,
+        }
     }
 
     /**
      * 解析，返回 BaGua
      */
     pub fn name(&self) -> SharedString {
-        let name = match (self.yao1, self.yao2, self.yao3) {
+        let name = match (self.first_yao, self.second_yao, self.third_yao) {
             (Yao::阳, Yao::阳, Yao::阳) => SharedString::new("乾"),
-            (Yao::阴, Yao::阳, Yao::阳) => SharedString::new("兑"),
+            (Yao::阳, Yao::阳, Yao::阴) => SharedString::new("兑"),
             (Yao::阳, Yao::阴, Yao::阳) => SharedString::new("离"),
-            (Yao::阴, Yao::阴, Yao::阳) => SharedString::new("震"),
-            (Yao::阳, Yao::阳, Yao::阴) => SharedString::new("巽"),
+            (Yao::阳, Yao::阴, Yao::阴) => SharedString::new("震"),
+            (Yao::阴, Yao::阳, Yao::阳) => SharedString::new("巽"),
             (Yao::阴, Yao::阳, Yao::阴) => SharedString::new("坎"),
-            (Yao::阳, Yao::阴, Yao::阴) => SharedString::new("艮"),
+            (Yao::阴, Yao::阴, Yao::阳) => SharedString::new("艮"),
             (Yao::阴, Yao::阴, Yao::阴) => SharedString::new("坤"),
         };
 
@@ -142,9 +154,9 @@ impl Gua8 {
      */
     pub fn reverse(&mut self, index: u8) {
         match index {
-            1 => self.yao1.reverse(),
-            2 => self.yao2.reverse(),
-            3 => self.yao3.reverse(),
+            1 => self.third_yao.reverse(),
+            2 => self.second_yao.reverse(),
+            3 => self.first_yao.reverse(),
             _ => !unreachable!("翻转爻只可能是 1, 2, 3"),
         }
     }
@@ -520,12 +532,12 @@ impl Gua64 {
     /// 从下往上数，共六个
     pub const fn yao(&self, index: Gua64_Yao_Index) -> Yao {
         match index {
-            Gua64_Yao_Index::First => self.xia.yao3,
-            Gua64_Yao_Index::Second => self.xia.yao2,
-            Gua64_Yao_Index::Third => self.xia.yao1,
-            Gua64_Yao_Index::Fourth => self.shang.yao3,
-            Gua64_Yao_Index::Fifth => self.shang.yao2,
-            Gua64_Yao_Index::Sixth => self.shang.yao1,
+            Gua64_Yao_Index::First => self.xia.first_yao,
+            Gua64_Yao_Index::Second => self.xia.second_yao,
+            Gua64_Yao_Index::Third => self.xia.third_yao,
+            Gua64_Yao_Index::Fourth => self.shang.first_yao,
+            Gua64_Yao_Index::Fifth => self.shang.second_yao,
+            Gua64_Yao_Index::Sixth => self.shang.third_yao,
         }
     }
 
@@ -536,15 +548,15 @@ impl Gua64 {
     /// * 二三四爻作为下卦
     pub const fn hu_gua(&self) -> Self {
         let shang = Gua8::new(
-            self.yao(Gua64_Yao_Index::Fifth),
-            self.yao(Gua64_Yao_Index::Fourth),
             self.yao(Gua64_Yao_Index::Third),
+            self.yao(Gua64_Yao_Index::Fourth),
+            self.yao(Gua64_Yao_Index::Fifth),
         );
 
         let xia = Gua8::new(
-            self.yao(Gua64_Yao_Index::Fourth),
-            self.yao(Gua64_Yao_Index::Third),
             self.yao(Gua64_Yao_Index::Second),
+            self.yao(Gua64_Yao_Index::Third),
+            self.yao(Gua64_Yao_Index::Fourth),
         );
 
         Self::new(shang, xia)
