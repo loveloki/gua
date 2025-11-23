@@ -2,9 +2,7 @@ use gpui::*;
 
 use crate::ui::{home::Stage, sidebar::StageItem};
 
-/**
- * 历史记录
- */
+/// 历史记录
 pub struct History {}
 
 impl History {
@@ -16,9 +14,7 @@ impl History {
         Self {}
     }
 
-    /**
-     * 标题
-     */
+    /// 标题
     pub fn title(&self) -> impl IntoElement {
         div()
             .child(div().child("卜卦记录").text_2xl())

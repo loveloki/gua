@@ -6,9 +6,7 @@ use crate::{
     ui::{home::Stage, sidebar::StageItem, stage::result::ResultView},
 };
 
-/**
- * 算卦和结果
- */
+/// 算卦和结果
 pub struct QiGua {
     two_number: Entity<TwoNumber>,
     time: Entity<Time>,
@@ -35,9 +33,7 @@ impl QiGua {
         }
     }
 
-    /**
-     * 标题
-     */
+    /// 标题
     pub fn title(&self) -> impl IntoElement {
         div()
             .child(div().child("开启卜卦之旅").text_2xl())

@@ -10,9 +10,7 @@ const ABOUT_MARKDOWN: &str = "项目主页： [gua](https://github.com/loveloki/
 
 const README_MARKDOWN: &str = include_str!("../../../README.MD");
 
-/**
- * 历史记录
- */
+/// 历史记录
 pub struct About {}
 
 impl About {
@@ -24,9 +22,7 @@ impl About {
         Self {}
     }
 
-    /**
-     * 检查更新按钮
-     */
+    /// 检查更新按钮
     fn check_update(&self) -> impl IntoElement {
         div().child(
             Button::new("manual-update-btn")
@@ -37,23 +33,17 @@ impl About {
         )
     }
 
-    /**
-     * 当前版本信息
-     */
+    /// 当前版本信息
     fn current_version(&self) -> impl IntoElement {
         div().child(format!("当前版本：{CURRENT_VERSION}"))
     }
 
-    /**
-     * 项目信息
-     */
+    /// 项目信息
     fn repo_info(&self, window: &mut Window, cx: &mut App) -> impl IntoElement {
         div().child(TextView::markdown("repo-info", ABOUT_MARKDOWN, window, cx))
     }
 
-    /**
-     * 项目信息
-     */
+    /// README内容
     fn readme_info(&self, window: &mut Window, cx: &mut App) -> impl IntoElement {
         TextView::markdown("repo-md", README_MARKDOWN, window, cx)
     }

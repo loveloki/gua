@@ -2,9 +2,7 @@ use gpui::{App, AppContext, Context, Entity, IntoElement, ParentElement, Render,
 
 use crate::ui::update::Update;
 
-/**
- * 标题栏
- */
+/// 标题栏
 pub struct AppHeader {
     update: Entity<Update>,
 }

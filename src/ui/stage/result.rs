@@ -6,9 +6,7 @@ use gpui_component::h_flex;
 
 use crate::{gua::ba_gua::GuaResultStep, state::global::GlobalState};
 
-/**
- * 算卦结果
- */
+/// 算卦结果
 pub struct ResultView;
 
 impl ResultView {

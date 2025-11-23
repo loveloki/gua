@@ -3,9 +3,7 @@ use gpui_component::{Icon, IconName, alert::Alert, text::TextView};
 
 use crate::auto_update::{AutoUpdater, CURRENT_VERSION};
 
-/**
- * 算卦和结果
- */
+/// 算卦和结果
 pub struct Update {}
 
 impl Update {
@@ -17,9 +15,7 @@ impl Update {
         Self {}
     }
 
-    /**
-     * 提示更新 UI
-     */
+    /// 提示更新 UI
     fn tip_content(
         &mut self,
         info: (SemanticVersion, String),

@@ -154,9 +154,7 @@ mod tests {
     use super::BaGuaCalculator;
 
     #[test]
-    /**
-     * 测试 calculate_from_two_numbers
-     */
+    /// 测试 calculate_from_two_numbers
     fn test_calculate_from_two_numbers() {
         let r1 = BaGuaCalculator::calculate_from_two_numbers(128, 33, 128 + 33);
         assert_eq!(r1.ben_gua, Gua64::泰);

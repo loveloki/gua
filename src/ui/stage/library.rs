@@ -8,17 +8,11 @@ use crate::{
     ui::{home::Stage, sidebar::StageItem},
 };
 
-/**
- * 查询基础内容
- */
+/// 查询基础内容
 pub struct Library {
-    /**
-     * 当前卦象的索引
-     */
+    /// 当前卦象的索引
     gua_index: usize,
-    /**
-     * 六十四卦信息列表
-     */
+    /// 六十四卦信息列表
     gua64: Vec<Gua64Info>,
 }
 
@@ -36,9 +30,7 @@ impl Library {
         }
     }
 
-    /**
-     * 随机展示一个卦象
-     */
+    /// 随机展示一个卦象
     fn change_random(&mut self) {
         let mut random_index = rand::rng().random_range(0..self.gua64.len());
 

@@ -9,9 +9,7 @@ pub enum StageItem {
     About,
 }
 
-/**
- * 应用侧边栏
- */
+/// 应用侧边栏
 pub struct AppSideBar {
     collapsed: bool,
     pub active_stage: StageItem,

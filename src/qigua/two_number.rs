@@ -12,9 +12,7 @@ use crate::{gua::ba_gua::BaGuaCalculator, qigua::core::QiGuaCore, state::global:
 
 const NAME: &str = "两个数字";
 
-/**
- * 两个数字起卦
- */
+/// 两个数字起卦
 pub struct TwoNumber {
     content: Entity<InputTwoNumContent>,
 }
@@ -37,9 +35,7 @@ impl Render for TwoNumber {
     }
 }
 
-/**
- * 输入两个数字来计算卦象
- */
+/// 输入两个数字来计算卦象
 pub struct InputTwoNumContent {
     input1_state: Entity<InputState>,
     input2_state: Entity<InputState>,

@@ -11,9 +11,7 @@ use crate::qigua::core::QiGuaCore;
 
 const NAME: &str = "六爻";
 
-/**
- * 六爻起卦
- */
+/// 六爻起卦
 pub struct LiuYao {
     content: Entity<LiuYaoContent>,
 }
@@ -36,9 +34,7 @@ impl Render for LiuYao {
     }
 }
 
-/**
- * 输入六爻来计算卦象
- */
+/// 输入六爻来计算卦象
 pub struct LiuYaoContent {}
 
 impl LiuYaoContent {

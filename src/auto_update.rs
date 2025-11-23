@@ -22,27 +22,19 @@ pub struct GithubReleaseAsset {
     pub digest: Option<String>,
 }
 
-/**
- * 检查更新类型
- */
+/// 检查更新类型
 pub enum UpdateCheckType {
     Automatic,
     Manual,
 }
 
-/**
- * github 最新发布链接
- */
+/// github 最新发布链接
 const RELEASE_URL: &'static str = "https://api.github.com/repos/loveloki/gua/releases/latest";
 
-/**
- * 软件版本
- */
+/// 软件版本
 pub const CURRENT_VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
-/**
- * 轮询间隔
- */
+/// 轮询间隔
 const POLL_INTERVAL: Duration = Duration::from_secs(60 * 60);
 
 #[derive(Default)]
@@ -71,31 +63,23 @@ pub fn init(cx: &mut App) {
 
 pub struct AutoUpdater {
     current_version: SemanticVersion,
-    /**
-     * 正在进行中的轮询任务
-     */
+    /// 正在进行中的轮询任务
     pending_poll: Option<Task<Option<()>>>,
     update_info: Option<(SemanticVersion, String)>,
 }
 
 impl AutoUpdater {
-    /**
-     * 获取实例
-     */
+    /// 获取实例
     pub fn get(cx: &mut App) -> Option<Entity<Self>> {
         cx.default_global::<GlobalAutoUpdate>().0.clone()
     }
 
-    /**
-     * 获取当前版本
-     */
+    /// 获取当前版本
     pub fn current_version(&self) -> SemanticVersion {
         self.current_version
     }
 
-    /**
-     * 获取更新信息
-     */
+    /// 获取更新信息
     pub fn update_info(&self) -> Option<(SemanticVersion, String)> {
         self.update_info.clone()
     }
@@ -108,9 +92,7 @@ impl AutoUpdater {
         }
     }
 
-    /**
-     * 启动轮询
-     */
+    /// 启动轮询
     pub fn start_polling(&self, cx: &mut Context<Self>) -> Task<Result<()>> {
         println!("开始轮询！");
 
@@ -122,9 +104,7 @@ impl AutoUpdater {
         })
     }
 
-    /**
-     * 检查更新
-     */
+    /// 检查更新
     pub fn check(_: &mut Window, cx: &mut App) {
         if let Some(updater) = AutoUpdater::get(cx) {
             updater.update(cx, |this, cx| {
@@ -159,9 +139,7 @@ impl AutoUpdater {
         }));
     }
 
-    /**
-     * 更新应用
-     */
+    /// 更新应用
     pub async fn update(this: Entity<Self>, cx: &mut AsyncApp) -> Result<()> {
         println!("执行 update");
         let current_version = this.read_with(cx, |this, _| this.current_version)?;
@@ -203,9 +181,7 @@ impl AutoUpdater {
     }
 }
 
-/**
- * 根据操作系统和架构获取下载文件名
- */
+/// 根据操作系统和架构获取下载文件名
 fn get_download_filename() -> Result<String> {
     print!("操作系统为：{OS}");
 

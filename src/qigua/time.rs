@@ -19,9 +19,7 @@ use crate::{
 
 const NAME: &str = "时间";
 
-/**
- * 时间起卦
- */
+/// 时间起卦
 pub struct Time {
     content: Entity<TimeContent>,
 }
@@ -44,9 +42,7 @@ impl Render for Time {
     }
 }
 
-/**
- * 输入时间来计算卦象
- */
+/// 输入时间来计算卦象
 pub struct TimeContent {
     date_picker: Entity<DatePickerState>,
     select_time: NaiveDateTime,
@@ -120,16 +116,12 @@ impl TimeContent {
         }
     }
 
-    /**
-     * 日期选择
-     */
+    /// 日期选择
     fn data_picker_content(&self) -> impl IntoElement {
         DatePicker::new(&self.date_picker).number_of_months(1)
     }
 
-    /**
-     * 小时选择
-     */
+    /// 小时选择
     fn huor_select_content(&self) -> impl IntoElement {
         Select::new(&self.hour_select_state).title_prefix("时间：")
     }

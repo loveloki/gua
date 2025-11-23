@@ -26,9 +26,7 @@ impl AssetSource for Assets {
     }
 }
 
-/**
- * 初始化资源
- */
+/// 初始化资源
 pub fn init_gua64_info() -> Vec<Gua64Info> {
     let gua64_json_str = include_str!("../assets/gua64.json");
 

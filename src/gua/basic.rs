@@ -4,9 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use super::yao::*;
 
-/**
- * 64卦信息结构体
- */
+/// 64卦信息结构体
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Gua64Info {
     pub id: String,
@@ -63,41 +61,25 @@ pub struct Gua8 {
 }
 
 impl Gua8 {
-    /**
-     * 乾
-     */
+    /// 乾
     pub const 乾: Gua8 = Gua8::new(Yao::阳, Yao::阳, Yao::阳);
-    /**
-     * 兑
-     */
+    /// 兑
     pub const 兑: Gua8 = Gua8::new(Yao::阳, Yao::阳, Yao::阴);
-    /**
-     * 离
-     */
+    /// 离
     pub const 离: Gua8 = Gua8::new(Yao::阳, Yao::阴, Yao::阳);
-    /**
-     * 震
-     */
+    /// 震
     pub const 震: Gua8 = Gua8::new(Yao::阳, Yao::阴, Yao::阴);
 
-    /**
-     * 巽
-     */
+    /// 巽
     pub const 巽: Gua8 = Gua8::new(Yao::阴, Yao::阳, Yao::阳);
 
-    /**
-     * 坎
-     */
+    /// 坎
     pub const 坎: Gua8 = Gua8::new(Yao::阴, Yao::阳, Yao::阴);
 
-    /**
-     * 艮
-     */
+    /// 艮
     pub const 艮: Gua8 = Gua8::new(Yao::阴, Yao::阴, Yao::阳);
 
-    /**
-     * 坤
-     */
+    /// 坤
     pub const 坤: Gua8 = Gua8::new(Yao::阴, Yao::阴, Yao::阴);
 
     /// 根据三个爻创建新的八卦
@@ -112,9 +94,7 @@ impl Gua8 {
         }
     }
 
-    /**
-     * 解析，返回 BaGua
-     */
+    /// 解析，返回 BaGua
     pub fn name(&self) -> SharedString {
         let name = match (self.first_yao, self.second_yao, self.third_yao) {
             (Yao::阳, Yao::阳, Yao::阳) => SharedString::new("乾"),
@@ -130,9 +110,7 @@ impl Gua8 {
         name
     }
 
-    /**
-     * 解析数字，返回 BaGua
-     */
+    /// 解析数字，返回 BaGua
     pub fn from_num(num: u8) -> Self {
         let result = match num {
             1 => Gua8::乾,
@@ -211,341 +189,205 @@ impl From<u16> for Gua64YaoIndex {
  */
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Gua64 {
-    /**
-     * 上卦
-     */
+    /// 上卦
     shang: Gua8,
-    /**
-     * 下卦
-     */
+    /// 下卦
     xia: Gua8,
-    /**
-     * 名称
-     */
+    /// 名称
     name: SharedString,
-    // /**
-    //  * 释义等信息
-    //  */
+    // 释义等信息
     // info: GuaInfo,
 }
 
 impl Gua64 {
-    /**
-     * 乾
-     */
+    /// 乾
     pub const 乾: Gua64 = Gua64::new(Gua8::乾, Gua8::乾);
-    /**
-     * 坤
-     */
+    /// 坤
     pub const 坤: Gua64 = Gua64::new(Gua8::坤, Gua8::坤);
-    /**
-     * 屯
-     */
+    /// 屯
     pub const 屯: Gua64 = Gua64::new(Gua8::坎, Gua8::震);
 
-    /**
-     * 蒙
-     */
+    /// 蒙
     pub const 蒙: Gua64 = Gua64::new(Gua8::艮, Gua8::坎);
 
-    /**
-     * 需
-     */
+    /// 需
     pub const 需: Gua64 = Gua64::new(Gua8::坎, Gua8::乾);
 
-    /**
-     * 讼
-     */
+    /// 讼
     pub const 讼: Gua64 = Gua64::new(Gua8::乾, Gua8::坎);
 
-    /**
-     * 师
-     */
+    /// 师
     pub const 师: Gua64 = Gua64::new(Gua8::坤, Gua8::坎);
 
-    /**
-     * 比
-     */
+    /// 比
     pub const 比: Gua64 = Gua64::new(Gua8::坎, Gua8::坤);
 
-    /**
-     * 小畜
-     */
+    /// 小畜
     pub const 小畜: Gua64 = Gua64::new(Gua8::巽, Gua8::乾);
 
-    /**
-     * 履
-     */
+    /// 履
     pub const 履: Gua64 = Gua64::new(Gua8::乾, Gua8::兑);
 
-    /**
-     * 泰
-     */
+    /// 泰
     pub const 泰: Gua64 = Gua64::new(Gua8::坤, Gua8::乾);
 
-    /**
-     * 否
-     */
+    /// 否
     pub const 否: Gua64 = Gua64::new(Gua8::乾, Gua8::坤);
 
-    /**
-     * 同人
-     */
+    /// 同人
     pub const 同人: Gua64 = Gua64::new(Gua8::乾, Gua8::离);
 
-    /**
-     * 大有
-     */
+    /// 大有
     pub const 大有: Gua64 = Gua64::new(Gua8::离, Gua8::乾);
 
-    /**
-     * 谦
-     */
+    /// 谦
     pub const 谦: Gua64 = Gua64::new(Gua8::坤, Gua8::艮);
 
-    /**
-     * 豫
-     */
+    /// 豫
     pub const 豫: Gua64 = Gua64::new(Gua8::震, Gua8::坤);
 
-    /**
-     * 随
-     */
+    /// 随
     pub const 随: Gua64 = Gua64::new(Gua8::兑, Gua8::震);
 
-    /**
-     * 蛊
-     */
+    /// 蛊
     pub const 蛊: Gua64 = Gua64::new(Gua8::艮, Gua8::巽);
 
-    /**
-     * 临
-     */
+    /// 临
     pub const 临: Gua64 = Gua64::new(Gua8::坤, Gua8::兑);
 
-    /**
-     * 观
-     */
+    /// 观
     pub const 观: Gua64 = Gua64::new(Gua8::巽, Gua8::坤);
 
-    /**
-     * 噬嗑
-     */
+    /// 噬嗑
     pub const 噬嗑: Gua64 = Gua64::new(Gua8::离, Gua8::震);
 
-    /**
-     * 贲
-     */
+    /// 贲
     pub const 贲: Gua64 = Gua64::new(Gua8::艮, Gua8::离);
 
-    /**
-     * 剥
-     */
+    /// 剥
     pub const 剥: Gua64 = Gua64::new(Gua8::艮, Gua8::坤);
 
-    /**
-     * 复
-     */
+    /// 复
     pub const 复: Gua64 = Gua64::new(Gua8::坤, Gua8::震);
 
-    /**
-     * 无妄
-     */
+    /// 无妄
     pub const 无妄: Gua64 = Gua64::new(Gua8::乾, Gua8::震);
 
-    /**
-     * 大畜
-     */
+    /// 大畜
     pub const 大畜: Gua64 = Gua64::new(Gua8::艮, Gua8::乾);
 
-    /**
-     * 颐
-     */
+    /// 颐
     pub const 颐: Gua64 = Gua64::new(Gua8::艮, Gua8::震);
 
-    /**
-     * 大过
-     */
+    /// 大过
     pub const 大过: Gua64 = Gua64::new(Gua8::兑, Gua8::巽);
 
-    /**
-     * 坎
-     */
+    /// 坎
     pub const 坎: Gua64 = Gua64::new(Gua8::坎, Gua8::坎);
 
-    /**
-     * 离
-     */
+    /// 离
     pub const 离: Gua64 = Gua64::new(Gua8::离, Gua8::离);
 
-    /**
-     * 咸
-     */
+    /// 咸
     pub const 咸: Gua64 = Gua64::new(Gua8::兑, Gua8::艮);
 
-    /**
-     * 恒
-     */
+    /// 恒
     pub const 恒: Gua64 = Gua64::new(Gua8::震, Gua8::巽);
 
-    /**
-     * 遯
-     */
+    /// 遯
     pub const 遯: Gua64 = Gua64::new(Gua8::乾, Gua8::艮);
 
-    /**
-     * 大壮
-     */
+    /// 大壮
     pub const 大壮: Gua64 = Gua64::new(Gua8::震, Gua8::乾);
 
-    /**
-     * 晋
-     */
+    /// 晋
     pub const 晋: Gua64 = Gua64::new(Gua8::离, Gua8::坤);
 
-    /**
-     * 明夷
-     */
+    /// 明夷
     pub const 明夷: Gua64 = Gua64::new(Gua8::坤, Gua8::离);
 
-    /**
-     * 家人
-     */
+    /// 家人
     pub const 家人: Gua64 = Gua64::new(Gua8::巽, Gua8::离);
 
-    /**
-     * 睽
-     */
+    /// 睽
     pub const 睽: Gua64 = Gua64::new(Gua8::离, Gua8::兑);
 
-    /**
-     * 蹇
-     */
+    /// 蹇
     pub const 蹇: Gua64 = Gua64::new(Gua8::坎, Gua8::艮);
 
-    /**
-     * 解
-     */
+    /// 解
     pub const 解: Gua64 = Gua64::new(Gua8::震, Gua8::坎);
 
-    /**
-     * 损
-     */
+    /// 损
     pub const 损: Gua64 = Gua64::new(Gua8::艮, Gua8::兑);
 
-    /**
-     * 益
-     */
+    /// 益
     pub const 益: Gua64 = Gua64::new(Gua8::巽, Gua8::震);
 
-    /**
-     * 夬
-     */
+    /// 夬
     pub const 夬: Gua64 = Gua64::new(Gua8::兑, Gua8::乾);
 
-    /**
-     * 姤
-     */
+    /// 姤
     pub const 姤: Gua64 = Gua64::new(Gua8::乾, Gua8::巽);
 
-    /**
-     * 萃
-     */
+    /// 萃
     pub const 萃: Gua64 = Gua64::new(Gua8::兑, Gua8::坤);
 
-    /**
-     * 升
-     */
+    /// 升
     pub const 升: Gua64 = Gua64::new(Gua8::坤, Gua8::巽);
 
-    /**
-     * 困
-     */
+    /// 困
     pub const 困: Gua64 = Gua64::new(Gua8::兑, Gua8::坎);
 
-    /**
-     * 井
-     */
+    /// 井
     pub const 井: Gua64 = Gua64::new(Gua8::坎, Gua8::巽);
 
-    /**
-     * 革
-     */
+    /// 革
     pub const 革: Gua64 = Gua64::new(Gua8::兑, Gua8::离);
 
-    /**
-     * 鼎
-     */
+    /// 鼎
     pub const 鼎: Gua64 = Gua64::new(Gua8::离, Gua8::巽);
 
-    /**
-     * 震
-     */
+    /// 震
     pub const 震: Gua64 = Gua64::new(Gua8::震, Gua8::震);
 
-    /**
-     * 艮
-     */
+    /// 艮
     pub const 艮: Gua64 = Gua64::new(Gua8::艮, Gua8::艮);
 
-    /**
-     * 渐
-     */
+    /// 渐
     pub const 渐: Gua64 = Gua64::new(Gua8::巽, Gua8::艮);
 
-    /**
-     * 归妹
-     */
+    /// 归妹
     pub const 归妹: Gua64 = Gua64::new(Gua8::震, Gua8::兑);
 
-    /**
-     * 丰
-     */
+    /// 丰
     pub const 丰: Gua64 = Gua64::new(Gua8::震, Gua8::离);
 
-    /**
-     * 旅
-     */
+    /// 旅
     pub const 旅: Gua64 = Gua64::new(Gua8::离, Gua8::艮);
 
-    /**
-     * 巽
-     */
+    /// 巽
     pub const 巽: Gua64 = Gua64::new(Gua8::巽, Gua8::巽);
 
-    /**
-     * 兑
-     */
+    /// 兑
     pub const 兑: Gua64 = Gua64::new(Gua8::兑, Gua8::兑);
 
-    /**
-     * 涣
-     */
+    /// 涣
     pub const 涣: Gua64 = Gua64::new(Gua8::巽, Gua8::坎);
 
-    /**
-     * 节
-     */
+    /// 节
     pub const 节: Gua64 = Gua64::new(Gua8::坎, Gua8::兑);
 
-    /**
-     * 中孚
-     */
+    /// 中孚
     pub const 中孚: Gua64 = Gua64::new(Gua8::巽, Gua8::兑);
 
-    /**
-     * 小过
-     */
+    /// 小过
     pub const 小过: Gua64 = Gua64::new(Gua8::震, Gua8::艮);
 
-    /**
-     * 既济
-     */
+    /// 既济
     pub const 既济: Gua64 = Gua64::new(Gua8::坎, Gua8::离);
 
-    /**
-     * 未济
-     */
+    /// 未济
     pub const 未济: Gua64 = Gua64::new(Gua8::离, Gua8::坎);
 
     pub const fn new(shang: Gua8, xia: Gua8) -> Self {
@@ -588,9 +430,7 @@ impl Gua64 {
         Self::new(shang, xia)
     }
 
-    /**
-     * 根据上下卦获得卦象名称
-     */
+    /// 根据上下卦获得卦象名称
     pub const fn parse_name(shang: Gua8, xia: Gua8) -> SharedString {
         match (shang, xia) {
             (Gua8::乾, Gua8::乾) => SharedString::new_static("乾"),
@@ -717,9 +557,7 @@ mod tests {
     use super::{Gua8, Gua8YaoIndex, Yao, ichang_mod};
 
     #[test]
-    /**
-     * gua8 变卦功能测试
-     */
+    /// gua8 变卦功能测试
     fn test_gua8_change() {
         let mut gua = Gua8::new(Yao::阳, Yao::阳, Yao::阳);
 
@@ -758,9 +596,7 @@ mod tests {
     }
 
     #[test]
-    /**
-     * 测试 ichang_mod 函数
-     */
+    /// 测试 ichang_mod 函数
     fn test_ichang_mod() {
         assert_eq!(ichang_mod(0, 6), 6);
         assert_eq!(ichang_mod(1, 6), 1);

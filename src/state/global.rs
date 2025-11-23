@@ -6,13 +6,9 @@ use crate::{
 };
 
 pub struct GlobalState {
-    /**
-     * 算卦结果
-     */
+    /// 算卦结果
     pub result: Option<GuaResult>,
-    /**
-     * 64卦信息
-     */
+    /// 64卦信息
     pub gua64_info_list: Vec<Gua64Info>,
 }
 
