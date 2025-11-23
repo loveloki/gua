@@ -298,5 +298,6 @@ mod tests {
 
         assert_eq!(r1.ben_gua, Gua64::晋);
         assert_eq!(r1.bian_gua, Gua64::豫);
+        assert_eq!(r1.hu_gua, Gua64::蹇);
     }
 }
