@@ -3,7 +3,7 @@ use std::fmt::Debug;
 use chrono::{DateTime, Local};
 use gpui::{Context, IntoElement, ParentElement, Render, SharedString, Window, div};
 
-use crate::gua::basic::{Gua8, Gua64, ichang_mod};
+use crate::gua::basic::{Gua8, Gua64, Gua64YaoIndex, ichang_mod};
 
 /// 卦象计算器
 #[derive(Debug)]
@@ -50,7 +50,7 @@ impl BaGuaCalculator {
         });
 
         // 余数即变爻的位置
-        let bian_index = ichang_mod(bian_num, 6);
+        let bian_index = Gua64YaoIndex::from(bian_num);
 
         // 变卦
         let mut bian_gua = ben_gua.clone();
@@ -59,8 +59,9 @@ impl BaGuaCalculator {
         steps.push(GuaResultStep {
             description: format!("计算变卦").into(),
             origin: format!(
-                "本卦：{} \n变数：{bian_num} % 6 = {bian_index}",
-                ben_gua.display()
+                "本卦：{} \n变数：{bian_num} % 6 = {}",
+                ben_gua.display(),
+                bian_index as u16
             )
             .into(),
             result: format!("变卦：{}", bian_gua.display()).into(),

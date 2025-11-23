@@ -171,7 +171,9 @@ pub enum Gua8YaoIndex {
 }
 
 /// 64 卦爻的顺序
+///
 /// 注意爻的顺序是从下往上
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Gua64YaoIndex {
     /// 初爻（一爻）
     First = 1,
@@ -185,6 +187,22 @@ pub enum Gua64YaoIndex {
     Fifth,
     /// 上爻（六爻）
     Sixth,
+}
+
+impl From<u16> for Gua64YaoIndex {
+    fn from(value: u16) -> Self {
+        let bian_index = ichang_mod(value, 6);
+
+        match bian_index {
+            1 => Gua64YaoIndex::First,
+            2 => Gua64YaoIndex::Second,
+            3 => Gua64YaoIndex::Third,
+            4 => Gua64YaoIndex::Fourth,
+            5 => Gua64YaoIndex::Fifth,
+            6 => Gua64YaoIndex::Sixth,
+            _ => unreachable!(),
+        }
+    }
 }
 
 /**
@@ -657,20 +675,17 @@ impl Gua64 {
         SharedString::new(display)
     }
 
-    /**
-     * 进行变卦
-     * 传入的 num 应该为 1 到 6
-     * 顺序为从下到上，即 1 是下卦的最后一个爻，6 是上卦的第一个爻
-     */
-    pub fn change(&mut self, num: u8) {
-        match num {
-            1 => self.xia.reverse(Gua8YaoIndex::First),
-            2 => self.xia.reverse(Gua8YaoIndex::Second),
-            3 => self.xia.reverse(Gua8YaoIndex::Third),
-            4 => self.shang.reverse(Gua8YaoIndex::First),
-            5 => self.shang.reverse(Gua8YaoIndex::Second),
-            6 => self.shang.reverse(Gua8YaoIndex::Third),
-            _ => !unreachable!("变卦的爻只能是 1 到 6"),
+    /// 进行变卦
+    ///
+    /// * `index` - Gua64YaoIndex，要改变的爻
+    pub fn change(&mut self, index: Gua64YaoIndex) {
+        match index {
+            Gua64YaoIndex::First => self.xia.reverse(Gua8YaoIndex::First),
+            Gua64YaoIndex::Second => self.xia.reverse(Gua8YaoIndex::Second),
+            Gua64YaoIndex::Third => self.xia.reverse(Gua8YaoIndex::Third),
+            Gua64YaoIndex::Fourth => self.shang.reverse(Gua8YaoIndex::First),
+            Gua64YaoIndex::Fifth => self.shang.reverse(Gua8YaoIndex::Second),
+            Gua64YaoIndex::Sixth => self.shang.reverse(Gua8YaoIndex::Third),
         }
 
         self.name = Self::parse_name(self.shang, self.xia);
