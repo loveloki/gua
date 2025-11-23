@@ -172,8 +172,8 @@ pub enum Gua8YaoIndex {
 
 /// 64 卦爻的顺序
 /// 注意爻的顺序是从下往上
-enum Gua64_Yao_Index {
-    /// 一爻
+pub enum Gua64YaoIndex {
+    /// 初爻（一爻）
     First = 1,
     /// 二爻
     Second,
@@ -183,7 +183,7 @@ enum Gua64_Yao_Index {
     Fourth,
     /// 五爻
     Fifth,
-    /// 六爻
+    /// 上爻（六爻）
     Sixth,
 }
 
@@ -538,14 +538,14 @@ impl Gua64 {
 
     /// 根据索引获取爻
     /// 从下往上数，共六个
-    pub const fn yao(&self, index: Gua64_Yao_Index) -> Yao {
+    pub const fn yao(&self, index: Gua64YaoIndex) -> Yao {
         match index {
-            Gua64_Yao_Index::First => self.xia.first_yao,
-            Gua64_Yao_Index::Second => self.xia.second_yao,
-            Gua64_Yao_Index::Third => self.xia.third_yao,
-            Gua64_Yao_Index::Fourth => self.shang.first_yao,
-            Gua64_Yao_Index::Fifth => self.shang.second_yao,
-            Gua64_Yao_Index::Sixth => self.shang.third_yao,
+            Gua64YaoIndex::First => self.xia.first_yao,
+            Gua64YaoIndex::Second => self.xia.second_yao,
+            Gua64YaoIndex::Third => self.xia.third_yao,
+            Gua64YaoIndex::Fourth => self.shang.first_yao,
+            Gua64YaoIndex::Fifth => self.shang.second_yao,
+            Gua64YaoIndex::Sixth => self.shang.third_yao,
         }
     }
 
@@ -556,15 +556,15 @@ impl Gua64 {
     /// * 二三四爻作为下卦
     pub const fn hu_gua(&self) -> Self {
         let shang = Gua8::new(
-            self.yao(Gua64_Yao_Index::Third),
-            self.yao(Gua64_Yao_Index::Fourth),
-            self.yao(Gua64_Yao_Index::Fifth),
+            self.yao(Gua64YaoIndex::Third),
+            self.yao(Gua64YaoIndex::Fourth),
+            self.yao(Gua64YaoIndex::Fifth),
         );
 
         let xia = Gua8::new(
-            self.yao(Gua64_Yao_Index::Second),
-            self.yao(Gua64_Yao_Index::Third),
-            self.yao(Gua64_Yao_Index::Fourth),
+            self.yao(Gua64YaoIndex::Second),
+            self.yao(Gua64YaoIndex::Third),
+            self.yao(Gua64YaoIndex::Fourth),
         );
 
         Self::new(shang, xia)
