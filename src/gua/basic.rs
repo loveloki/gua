@@ -149,17 +149,25 @@ impl Gua8 {
         result
     }
 
-    /**
-     * 翻转指定位置的爻
-     */
-    pub fn reverse(&mut self, index: u8) {
+    ///翻转指定位置的爻
+    pub fn reverse(&mut self, index: Gua8YaoIndex) {
         match index {
-            1 => self.third_yao.reverse(),
-            2 => self.second_yao.reverse(),
-            3 => self.first_yao.reverse(),
-            _ => !unreachable!("翻转爻只可能是 1, 2, 3"),
+            Gua8YaoIndex::First => self.first_yao.reverse(),
+            Gua8YaoIndex::Second => self.second_yao.reverse(),
+            Gua8YaoIndex::Third => self.third_yao.reverse(),
         }
     }
+}
+
+/// 八卦爻的顺序
+/// 注意爻的顺序是从下往上
+pub enum Gua8YaoIndex {
+    /// 初爻（一爻）
+    First = 1,
+    /// 二爻
+    Second,
+    /// 三爻
+    Third,
 }
 
 /// 64 卦爻的顺序
@@ -656,12 +664,12 @@ impl Gua64 {
      */
     pub fn change(&mut self, num: u8) {
         match num {
-            1 => self.xia.reverse(3),
-            2 => self.xia.reverse(2),
-            3 => self.xia.reverse(1),
-            4 => self.shang.reverse(3),
-            5 => self.shang.reverse(2),
-            6 => self.shang.reverse(1),
+            1 => self.xia.reverse(Gua8YaoIndex::First),
+            2 => self.xia.reverse(Gua8YaoIndex::Second),
+            3 => self.xia.reverse(Gua8YaoIndex::Third),
+            4 => self.shang.reverse(Gua8YaoIndex::First),
+            5 => self.shang.reverse(Gua8YaoIndex::Second),
+            6 => self.shang.reverse(Gua8YaoIndex::Third),
             _ => !unreachable!("变卦的爻只能是 1 到 6"),
         }
 
@@ -691,7 +699,7 @@ pub fn ichang_mod(number: u16, base: u16) -> u8 {
 
 #[cfg(test)]
 mod tests {
-    use super::{Gua8, Yao, ichang_mod};
+    use super::{Gua8, Gua8YaoIndex, Yao, ichang_mod};
 
     #[test]
     /**
@@ -704,33 +712,33 @@ mod tests {
         assert_eq!(gua, Gua8::乾);
 
         // 兑卦
-        gua.reverse(1);
+        gua.reverse(Gua8YaoIndex::Third);
         assert_eq!(gua, Gua8::兑);
 
         // 震卦
-        gua.reverse(2);
+        gua.reverse(Gua8YaoIndex::Second);
         assert_eq!(gua, Gua8::震);
 
         // 坤卦
-        gua.reverse(3);
+        gua.reverse(Gua8YaoIndex::First);
         assert_eq!(gua, Gua8::坤);
 
         // 艮卦
-        gua.reverse(1);
+        gua.reverse(Gua8YaoIndex::Third);
         assert_eq!(gua, Gua8::艮);
 
         // 巽卦
-        gua.reverse(2);
+        gua.reverse(Gua8YaoIndex::Second);
         assert_eq!(gua, Gua8::巽);
 
         // 坎卦
-        gua.reverse(1);
+        gua.reverse(Gua8YaoIndex::Third);
         assert_eq!(gua, Gua8::坎);
 
         // 离卦
-        gua.reverse(1);
-        gua.reverse(2);
-        gua.reverse(3);
+        gua.reverse(Gua8YaoIndex::Third);
+        gua.reverse(Gua8YaoIndex::Second);
+        gua.reverse(Gua8YaoIndex::First);
         assert_eq!(gua, Gua8::离);
     }
 
