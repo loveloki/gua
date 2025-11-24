@@ -197,16 +197,16 @@ impl QiGuaCore for LiuYaoContent {
 enum LiuYaoType {
     /// 阴
     #[strum(serialize = "阴")]
-    Yin,
+    阴,
     /// 阳
     #[strum(serialize = "阳")]
-    Yang,
+    阳,
     /// 动阴
     #[strum(serialize = "动阴")]
-    DongYin,
+    动阴,
     /// 动阳
     #[strum(serialize = "动阳")]
-    DongYang,
+    动阳,
 }
 
 impl LiuYaoType {
@@ -216,15 +216,15 @@ impl LiuYaoType {
     /// * `阳` 和 `动阳` 转为 `阳`
     pub const fn yao(self) -> Yao {
         match self {
-            LiuYaoType::Yin | LiuYaoType::DongYin => Yao::阴,
-            LiuYaoType::Yang | LiuYaoType::DongYang => Yao::阳,
+            LiuYaoType::阴 | LiuYaoType::动阴 => Yao::阴,
+            LiuYaoType::阳 | LiuYaoType::动阳 => Yao::阳,
         }
     }
 
     /// 是否是动幺
     pub fn is_dong(self) -> bool {
         match self {
-            LiuYaoType::DongYin | LiuYaoType::DongYang => true,
+            LiuYaoType::动阴 | LiuYaoType::动阳 => true,
             _ => false,
         }
     }
@@ -236,14 +236,14 @@ impl LiuYaoType {
     /// * 三个爻一样，就是动爻
     pub fn from_three_yao(yao1: Yao, yao2: Yao, yao3: Yao) -> Self {
         match (yao1, yao2, yao3) {
-            (Yao::阳, Yao::阳, Yao::阳) => LiuYaoType::DongYang,
-            (Yao::阴, Yao::阴, Yao::阴) => LiuYaoType::DongYin,
-            (Yao::阳, Yao::阴, Yao::阴) => LiuYaoType::Yin,
-            (Yao::阴, Yao::阳, Yao::阴) => LiuYaoType::Yin,
-            (Yao::阴, Yao::阴, Yao::阳) => LiuYaoType::Yin,
-            (Yao::阴, Yao::阳, Yao::阳) => LiuYaoType::Yang,
-            (Yao::阳, Yao::阴, Yao::阳) => LiuYaoType::Yang,
-            (Yao::阳, Yao::阳, Yao::阴) => LiuYaoType::Yang,
+            (Yao::阳, Yao::阳, Yao::阳) => LiuYaoType::动阳,
+            (Yao::阴, Yao::阴, Yao::阴) => LiuYaoType::动阴,
+            (Yao::阳, Yao::阴, Yao::阴) => LiuYaoType::阴,
+            (Yao::阴, Yao::阳, Yao::阴) => LiuYaoType::阴,
+            (Yao::阴, Yao::阴, Yao::阳) => LiuYaoType::阴,
+            (Yao::阴, Yao::阳, Yao::阳) => LiuYaoType::阳,
+            (Yao::阳, Yao::阴, Yao::阳) => LiuYaoType::阳,
+            (Yao::阳, Yao::阳, Yao::阴) => LiuYaoType::阳,
         }
     }
 }
@@ -406,12 +406,12 @@ mod tests {
     #[test]
     /// 测试六爻算卦结果
     fn test_liu_yao() {
-        let first = LiuYaoType::Yang;
-        let second = LiuYaoType::Yin;
-        let third = LiuYaoType::DongYang;
-        let fourth = LiuYaoType::DongYin;
-        let fifth = LiuYaoType::Yang;
-        let sixth = LiuYaoType::Yang;
+        let first = LiuYaoType::阳;
+        let second = LiuYaoType::阴;
+        let third = LiuYaoType::动阳;
+        let fourth = LiuYaoType::动阴;
+        let fifth = LiuYaoType::阳;
+        let sixth = LiuYaoType::阳;
 
         // 计算本卦
         let (ben_gua_result, _) = ben_gua(first, second, third, fourth, fifth, sixth);
@@ -426,8 +426,8 @@ mod tests {
         assert_eq!(hu_gua_result, Gua64::未济);
 
         // 测试没有变卦的结果
-        let third = LiuYaoType::Yang;
-        let fourth = LiuYaoType::Yin;
+        let third = LiuYaoType::阳;
+        let fourth = LiuYaoType::阴;
 
         // 计算本卦
         let (ben_gua_result, _) = ben_gua(first, second, third, fourth, fifth, sixth);
