@@ -1,3 +1,5 @@
+use rand::random_bool;
+
 /// 爻，卦的基础单位，分为阴和阳
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Yao {
@@ -23,5 +25,13 @@ impl Yao {
     /// 翻转
     pub fn reverse(&mut self) {
         self.status = !self.status;
+    }
+
+    /// 获取随机爻
+    pub fn random_yao() -> Self {
+        match random_bool(1.0 / 2.0) {
+            true => Yao::阳,
+            false => Yao::阴,
+        }
     }
 }
