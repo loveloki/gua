@@ -228,6 +228,24 @@ impl LiuYaoType {
             _ => false,
         }
     }
+
+    /// 从三个 yao 转换
+    ///
+    /// # 注意
+    /// * 哪种爻数量多，最终就是哪种爻
+    /// * 三个爻一样，就是动爻
+    pub fn from_three_yao(yao1: Yao, yao2: Yao, yao3: Yao) -> Self {
+        match (yao1, yao2, yao3) {
+            (Yao::阳, Yao::阳, Yao::阳) => LiuYaoType::DongYang,
+            (Yao::阴, Yao::阴, Yao::阴) => LiuYaoType::DongYin,
+            (Yao::阳, Yao::阴, Yao::阴) => LiuYaoType::Yin,
+            (Yao::阴, Yao::阳, Yao::阴) => LiuYaoType::Yin,
+            (Yao::阴, Yao::阴, Yao::阳) => LiuYaoType::Yin,
+            (Yao::阴, Yao::阳, Yao::阳) => LiuYaoType::Yang,
+            (Yao::阳, Yao::阴, Yao::阳) => LiuYaoType::Yang,
+            (Yao::阳, Yao::阳, Yao::阴) => LiuYaoType::Yang,
+        }
+    }
 }
 
 /// 单个爻的选择（以及随机生成）UI
