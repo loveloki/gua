@@ -12,7 +12,7 @@ use gpui::{
     Subscription, Window, div,
 };
 use gpui_component::{
-    Disableable, StyledExt,
+    Disableable, Icon, StyledExt,
     button::{Button, ButtonVariants},
     h_flex,
     label::Label,
@@ -20,7 +20,7 @@ use gpui_component::{
     v_flex,
 };
 use std::str::FromStr;
-use strum::{Display, EnumString};
+use strum::{Display, EnumString, IntoStaticStr};
 
 const NAME: &str = "六爻";
 
@@ -193,7 +193,7 @@ impl QiGuaCore for LiuYaoContent {
 /// 爻的类型
 ///
 /// 用于六爻起卦，所以需要四种
-#[derive(Debug, PartialEq, EnumString, Display, Clone, Copy)]
+#[derive(Debug, PartialEq, EnumString, Display, Clone, Copy, IntoStaticStr)]
 enum LiuYaoType {
     /// 阴
     #[strum(serialize = "阴")]
@@ -246,6 +246,11 @@ impl LiuYaoType {
             (Yao::阳, Yao::阳, Yao::阴) => LiuYaoType::阳,
         }
     }
+
+    /// 随机生成 LiuYaoType
+    pub fn random() -> Self {
+        Self::from_three_yao(Yao::random_yao(), Yao::random_yao(), Yao::random_yao())
+    }
 }
 
 /// 单个爻的选择（以及随机生成）UI
@@ -281,7 +286,6 @@ impl SingalYaoSelect {
                     }
                     Some(s) => {
                         this.is_selected = true;
-
                         this.yao = Some(LiuYaoType::from_str(s).unwrap());
                     }
                 },
@@ -305,6 +309,19 @@ impl Render for SingalYaoSelect {
             .gap_1()
             .child(Label::new(self.title_prefix.clone()))
             .child(Select::new(&self.select_state).placeholder("选择爻象"))
+            .child(
+                Button::new("random-yao")
+                    .icon(Icon::empty().path("icons/dices.svg"))
+                    .on_click(cx.listener(|this, _, window, cx| {
+                        let random = LiuYaoType::random();
+                        this.select_state.update(cx, |state, cx| {
+                            state.set_selected_value(&random.into(), window, cx);
+
+                            this.is_selected = true;
+                            this.yao = Some(random);
+                        });
+                    })),
+            )
     }
 }
 
