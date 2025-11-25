@@ -1,8 +1,7 @@
 use crate::{
     core::{
         ba_gua::{GuaResult, GuaResultStep},
-        basic::{Gua8, Gua64, Gua64YaoIndex},
-        yao::Yao,
+        models::{Gua8, Gua64, Gua64YaoIndex, Yao},
     },
     qigua::core::QiGuaCore,
     state::global::GlobalState,

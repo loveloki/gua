@@ -274,7 +274,7 @@ fn hour_to_shi_chen(hour: u32) -> EarthlyBranch {
 
 #[cfg(test)]
 mod tests {
-    use crate::core::basic::Gua64;
+    use crate::core::models::Gua64;
     use chinese_lunisolar_calendar::{EarthlyBranch, LunisolarDate, SolarDate};
 
     use super::time_to_gua;
