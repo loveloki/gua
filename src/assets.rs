@@ -1,4 +1,4 @@
-use crate::gua::basic::Gua64Info;
+use crate::core::basic::Gua64Info;
 use anyhow::{Ok, anyhow};
 use gpui::AssetSource;
 use rust_embed::RustEmbed;

@@ -8,7 +8,7 @@ use crate::{assets::Assets, state::global::GlobalState, ui::home::HomeWindow};
 mod app_menus;
 mod assets;
 mod auto_update;
-mod gua;
+mod core;
 mod qigua;
 mod state;
 mod ui;

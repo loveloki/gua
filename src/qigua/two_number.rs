@@ -8,7 +8,7 @@ use gpui_component::{
     input::{Input, InputState},
 };
 
-use crate::{gua::ba_gua::BaGuaCalculator, qigua::core::QiGuaCore, state::global::GlobalState};
+use crate::{core::ba_gua::BaGuaCalculator, qigua::core::QiGuaCore, state::global::GlobalState};
 
 const NAME: &str = "两个数字";
 

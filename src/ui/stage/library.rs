@@ -3,7 +3,7 @@ use gpui_component::button::Button;
 use rand::Rng;
 
 use crate::{
-    gua::basic::Gua64Info,
+    core::basic::{Gua64, Gua64Info},
     state::global::GlobalState,
     ui::{home::Stage, sidebar::StageItem},
 };

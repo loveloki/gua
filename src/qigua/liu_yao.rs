@@ -1,5 +1,5 @@
 use crate::{
-    gua::{
+    core::{
         ba_gua::{GuaResult, GuaResultStep},
         basic::{Gua8, Gua64, Gua64YaoIndex},
         yao::Yao,

@@ -4,7 +4,10 @@ use gpui::{
 };
 use gpui_component::h_flex;
 
-use crate::{gua::ba_gua::GuaResultStep, state::global::GlobalState};
+use crate::{
+    core::ba_gua::{GuaResult, GuaResultStep},
+    state::global::GlobalState,
+};
 
 /// 算卦结果
 pub struct ResultView;

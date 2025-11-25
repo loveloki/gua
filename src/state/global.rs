@@ -2,7 +2,7 @@ use gpui::{App, Global};
 
 use crate::{
     assets::init_gua64_info,
-    gua::{ba_gua::GuaResult, basic::Gua64Info},
+    core::{ba_gua::GuaResult, basic::Gua64Info},
 };
 
 pub struct GlobalState {

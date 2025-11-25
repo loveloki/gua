@@ -12,7 +12,7 @@ use gpui_component::{
 };
 
 use crate::{
-    gua::ba_gua::{BaGuaCalculator, GuaResult, GuaResultStep},
+    core::ba_gua::{BaGuaCalculator, GuaResult, GuaResultStep},
     qigua::core::QiGuaCore,
     state::global::GlobalState,
 };
@@ -274,7 +274,7 @@ fn hour_to_shi_chen(hour: u32) -> EarthlyBranch {
 
 #[cfg(test)]
 mod tests {
-    use crate::gua::basic::Gua64;
+    use crate::core::basic::Gua64;
     use chinese_lunisolar_calendar::{EarthlyBranch, LunisolarDate, SolarDate};
 
     use super::time_to_gua;

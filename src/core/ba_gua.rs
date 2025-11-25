@@ -3,7 +3,7 @@ use std::fmt::Debug;
 use chrono::{DateTime, Local};
 use gpui::{Context, IntoElement, ParentElement, Render, SharedString, Window, div};
 
-use crate::gua::basic::{Gua8, Gua64, Gua64YaoIndex, ichang_mod};
+use crate::core::basic::{Gua8, Gua64, Gua64YaoIndex, ichang_mod};
 
 /// 卦象计算器
 #[derive(Debug)]
@@ -152,7 +152,7 @@ impl Render for GuaResult {
 
 #[cfg(test)]
 mod tests {
-    use crate::gua::basic::{Gua8, Gua64};
+    use crate::core::basic::{Gua8, Gua64};
 
     use super::BaGuaCalculator;
 
