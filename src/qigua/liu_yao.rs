@@ -1,6 +1,6 @@
 use crate::{
     core::{
-        ba_gua::{GuaResult, GuaResultStep},
+        ba_gua::GuaResult,
         models::{Gua8, Gua64, Gua64YaoIndex, Yao},
     },
     qigua::core::QiGuaCore,
@@ -130,8 +130,6 @@ impl Render for LiuYaoContent {
 
 impl QiGuaCore for LiuYaoContent {
     fn calc_gua(&mut self, cx: &mut Context<Self>) {
-        let mut steps: Vec<GuaResultStep> = vec![];
-
         let first = self.first_yao.read(cx).yao.clone().unwrap();
         let second = self.second_yao.read(cx).yao.clone().unwrap();
         let third = self.third_yao.read(cx).yao.clone().unwrap();
@@ -140,43 +138,17 @@ impl QiGuaCore for LiuYaoContent {
         let sixth = self.sixth_yao.read(cx).yao.clone().unwrap();
 
         // 计算本卦
-        let (ben_gua, steps2) = ben_gua(first, second, third, fourth, fifth, sixth);
-
-        steps.append(&mut steps2.clone());
+        let ben_gua = ben_gua(first, second, third, fourth, fifth, sixth);
 
         // 计算变卦
         // 需要检查每一个爻，是否是动爻，对动幺进行翻转
         let bian_gua = bian_gua(&ben_gua, first, second, third, fourth, fifth, sixth);
 
-        match bian_gua.clone() {
-            None => {
-                steps.push(GuaResultStep {
-                    description: format!("计算变卦").into(),
-                    origin: format!("本卦：{}", ben_gua.display()).into(),
-                    result: format!("不存在动爻，没有变卦").into(),
-                });
-            }
-            Some(bian_gua) => {
-                steps.push(GuaResultStep {
-                    description: format!("计算变卦").into(),
-                    origin: format!("本卦：{}", ben_gua.display()).into(),
-                    result: format!("变卦：{}", bian_gua.display()).into(),
-                });
-            }
-        }
-
         // 计算互卦
         // 互卦
         let hu_gua = ben_gua.hu_gua();
 
-        steps.push(GuaResultStep {
-            description: format!("计算互卦").into(),
-            origin: format!("本卦：{}", ben_gua.display(),).into(),
-            result: format!("互卦：{}", hu_gua.display()).into(),
-        });
-
-        let mut ba_gua_result = GuaResult::new(ben_gua, bian_gua, hu_gua);
-        ba_gua_result.steps = steps;
+        let ba_gua_result = GuaResult::new(ben_gua, bian_gua, hu_gua);
 
         let gua_result = GlobalState::state_mut(cx);
         gua_result.result = Some(ba_gua_result.clone());
@@ -382,9 +354,7 @@ fn ben_gua(
     fourth: LiuYaoType,
     fifth: LiuYaoType,
     sixth: LiuYaoType,
-) -> (Gua64, Vec<GuaResultStep>) {
-    let mut steps: Vec<GuaResultStep> = vec![];
-
+) -> Gua64 {
     let shang = Gua8::new(
         LiuYaoType::yao(fourth),
         LiuYaoType::yao(fifth),
@@ -396,24 +366,9 @@ fn ben_gua(
         LiuYaoType::yao(third),
     );
 
-    steps.push(GuaResultStep {
-        description: format!("计算上卦和下卦").into(),
-        origin: format!(
-            "上爻：{sixth}，五爻：{fifth}，四爻：{fourth}， 三爻: {third}, 二爻: {second}, 初爻: {first}",
-        )
-        .into(),
-        result: format!("上卦：{}，下卦：{}", shang.name(), xia.name()).into(),
-    });
-
     let ben_gua = Gua64::new(shang, xia);
 
-    steps.push(GuaResultStep {
-        description: format!("计算本卦").into(),
-        origin: format!("上卦：{}，下卦：{}", shang.name(), xia.name()).into(),
-        result: format!("本卦：{}", ben_gua.name()).into(),
-    });
-
-    (ben_gua, steps)
+    ben_gua
 }
 
 mod tests {
@@ -430,7 +385,7 @@ mod tests {
         let sixth = LiuYaoType::阳;
 
         // 计算本卦
-        let (ben_gua_result, _) = ben_gua(first, second, third, fourth, fifth, sixth);
+        let ben_gua_result = ben_gua(first, second, third, fourth, fifth, sixth);
 
         // 计算变卦
         let bian_gua_result = bian_gua(&ben_gua_result, first, second, third, fourth, fifth, sixth);
@@ -446,7 +401,7 @@ mod tests {
         let fourth = LiuYaoType::阴;
 
         // 计算本卦
-        let (ben_gua_result, _) = ben_gua(first, second, third, fourth, fifth, sixth);
+        let ben_gua_result = ben_gua(first, second, third, fourth, fifth, sixth);
 
         // 计算变卦
         let bian_gua_result = bian_gua(&ben_gua_result, first, second, third, fourth, fifth, sixth);

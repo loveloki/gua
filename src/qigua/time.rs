@@ -12,7 +12,7 @@ use gpui_component::{
 };
 
 use crate::{
-    core::ba_gua::{BaGuaCalculator, GuaResult, GuaResultStep},
+    core::ba_gua::{BaGuaCalculator, GuaResult},
     qigua::core::QiGuaCore,
     state::global::GlobalState,
 };
@@ -172,8 +172,6 @@ impl Render for TimeContent {
 
 impl QiGuaCore for TimeContent {
     fn calc_gua(&mut self, cx: &mut Context<Self>) {
-        let mut steps: Vec<GuaResultStep> = vec![];
-
         let date = self.select_time;
 
         let year = date.year();
@@ -190,13 +188,7 @@ impl QiGuaCore for TimeContent {
         // 时辰
         let shi_chen = hour_to_shi_chen(hour);
 
-        steps.push(GuaResultStep {
-            origin: format!("公历：{year}/{month}/{day} {hour}").into(),
-            description: format!("将公历转换为农历和时辰").into(),
-            result: format!("农历：{lunisolar_date}, 时辰: {shi_chen}").into(),
-        });
-
-        let ba_gua_result = time_to_gua(lunisolar_date, shi_chen, steps);
+        let ba_gua_result = time_to_gua(lunisolar_date, shi_chen);
 
         let gua_result = GlobalState::state_mut(cx);
         gua_result.result = Some(ba_gua_result.clone());
@@ -209,48 +201,15 @@ impl QiGuaCore for TimeContent {
 }
 
 /// 根据时间计算卦象
-fn time_to_gua(
-    lunisolar_date: LunisolarDate,
-    shi_chen: EarthlyBranch,
-    mut steps: Vec<GuaResultStep>,
-) -> GuaResult {
+fn time_to_gua(lunisolar_date: LunisolarDate, shi_chen: EarthlyBranch) -> GuaResult {
     let day = lunisolar_date.to_lunar_day().to_u8();
     let month = lunisolar_date.to_lunar_month().to_u8_raw();
     let year = lunisolar_date.to_lunar_year().to_earthly_branch().ordinal();
 
-    steps.push(GuaResultStep {
-        description: format!("转为数字").into(),
-        origin: format!("农历：{lunisolar_date}").into(),
-        result: format!(
-            "年：{year}，月：{month}，日：{day} 时辰：{}",
-            shi_chen.ordinal()
-        )
-        .into(),
-    });
-
     let shang_num = (year + month + day) as u16;
     let xia_num = shang_num + shi_chen.ordinal() as u16;
 
-    steps.push(GuaResultStep {
-        description: format!("转为计算上卦和下卦的数字").into(),
-        origin: format!(
-            "年：{year}，月：{month}，日：{day} 时辰：{}",
-            shi_chen.ordinal()
-        )
-        .into(),
-        result: format!(
-            "num1：{year} + {month} + {day} = {shang_num}，num2：{shang_num} + {} = {xia_num}",
-            shi_chen.ordinal()
-        )
-        .into(),
-    });
-
-    let mut gua = BaGuaCalculator::calculate_from_two_numbers(shang_num, xia_num, xia_num);
-
-    // 合并所有的操作步骤记录
-    gua.steps.splice(0..0, steps);
-
-    gua
+    BaGuaCalculator::calculate_from_two_numbers(shang_num, xia_num, xia_num)
 }
 
 /// 根据小时获取时辰
@@ -285,7 +244,6 @@ mod tests {
         let r1 = time_to_gua(
             LunisolarDate::from_solar_date(SolarDate::from_ymd(2025, 11, 22).unwrap()).unwrap(),
             EarthlyBranch::Fifth,
-            vec![],
         );
 
         assert_eq!(r1.ben_gua, Gua64::晋);
