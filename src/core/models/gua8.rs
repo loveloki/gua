@@ -1,5 +1,4 @@
 use super::Yao;
-use gpui::SharedString;
 
 /// 八卦爻的顺序
 /// 注意爻的顺序是从下往上
@@ -62,16 +61,16 @@ impl Gua8 {
     }
 
     /// 解析，返回 BaGua
-    pub fn name(&self) -> SharedString {
+    pub fn name(&self) -> &'static str {
         let name = match (self.first_yao, self.second_yao, self.third_yao) {
-            (Yao::阳, Yao::阳, Yao::阳) => SharedString::new("乾"),
-            (Yao::阳, Yao::阳, Yao::阴) => SharedString::new("兑"),
-            (Yao::阳, Yao::阴, Yao::阳) => SharedString::new("离"),
-            (Yao::阳, Yao::阴, Yao::阴) => SharedString::new("震"),
-            (Yao::阴, Yao::阳, Yao::阳) => SharedString::new("巽"),
-            (Yao::阴, Yao::阳, Yao::阴) => SharedString::new("坎"),
-            (Yao::阴, Yao::阴, Yao::阳) => SharedString::new("艮"),
-            (Yao::阴, Yao::阴, Yao::阴) => SharedString::new("坤"),
+            (Yao::阳, Yao::阳, Yao::阳) => "乾",
+            (Yao::阳, Yao::阳, Yao::阴) => "兑",
+            (Yao::阳, Yao::阴, Yao::阳) => "离",
+            (Yao::阳, Yao::阴, Yao::阴) => "震",
+            (Yao::阴, Yao::阳, Yao::阳) => "巽",
+            (Yao::阴, Yao::阳, Yao::阴) => "坎",
+            (Yao::阴, Yao::阴, Yao::阳) => "艮",
+            (Yao::阴, Yao::阴, Yao::阴) => "坤",
         };
 
         name

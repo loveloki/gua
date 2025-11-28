@@ -65,13 +65,13 @@ impl GuaResult {
         }
     }
 
-    pub fn display(&self) -> SharedString {
-        let ben_gua = self.ben_gua.display();
+    pub fn display(&self) -> String {
+        let ben_gua = self.ben_gua.name();
         let bian_gua = match &self.bian_gua {
             None => "无".into(),
-            Some(gua) => gua.display(),
+            Some(gua) => gua.name(),
         };
-        let hu_gua = self.hu_gua.display();
+        let hu_gua = self.hu_gua.name();
 
         let parsed_date = self
             .date
@@ -82,7 +82,6 @@ impl GuaResult {
             "本卦：{}\n变卦：{}\n互卦：{}\n算卦时间：{}",
             ben_gua, bian_gua, hu_gua, parsed_date
         )
-        .into()
     }
 }
 

@@ -48,10 +48,6 @@ pub struct Gua64 {
     shang: Gua8,
     /// 下卦
     xia: Gua8,
-    /// 名称
-    name: SharedString,
-    // 释义等信息
-    // info: GuaInfo,
 }
 
 impl Gua64 {
@@ -246,9 +242,7 @@ impl Gua64 {
     pub const 未济: Gua64 = Gua64::new(Gua8::离, Gua8::坎);
 
     pub const fn new(shang: Gua8, xia: Gua8) -> Self {
-        let name = Self::parse_name(shang, xia);
-
-        Self { shang, xia, name }
+        Self { shang, xia }
     }
 
     /// 根据索引获取爻
@@ -285,89 +279,74 @@ impl Gua64 {
         Self::new(shang, xia)
     }
 
-    /// 根据上下卦获得卦象名称
-    pub const fn parse_name(shang: Gua8, xia: Gua8) -> SharedString {
-        match (shang, xia) {
-            (Gua8::乾, Gua8::乾) => SharedString::new_static("乾"),
-            (Gua8::坤, Gua8::坤) => SharedString::new_static("坤"),
-            (Gua8::坎, Gua8::震) => SharedString::new_static("屯"),
-            (Gua8::艮, Gua8::坎) => SharedString::new_static("蒙"),
-            (Gua8::坎, Gua8::乾) => SharedString::new_static("需"),
-            (Gua8::乾, Gua8::坎) => SharedString::new_static("讼"),
-            (Gua8::坤, Gua8::坎) => SharedString::new_static("师"),
-            (Gua8::坎, Gua8::坤) => SharedString::new_static("比"),
-            (Gua8::巽, Gua8::乾) => SharedString::new_static("小畜"),
-            (Gua8::乾, Gua8::兑) => SharedString::new_static("履"),
-            (Gua8::坤, Gua8::乾) => SharedString::new_static("泰"),
-            (Gua8::乾, Gua8::坤) => SharedString::new_static("否"),
-            (Gua8::乾, Gua8::离) => SharedString::new_static("同人"),
-            (Gua8::离, Gua8::乾) => SharedString::new_static("大有"),
-            (Gua8::坤, Gua8::艮) => SharedString::new_static("谦"),
-            (Gua8::震, Gua8::坤) => SharedString::new_static("豫"),
-            (Gua8::兑, Gua8::震) => SharedString::new_static("随"),
-            (Gua8::艮, Gua8::巽) => SharedString::new_static("蛊"),
-            (Gua8::坤, Gua8::兑) => SharedString::new_static("临"),
-            (Gua8::巽, Gua8::坤) => SharedString::new_static("观"),
-            (Gua8::离, Gua8::震) => SharedString::new_static("噬嗑"),
-            (Gua8::艮, Gua8::离) => SharedString::new_static("贲"),
-            (Gua8::艮, Gua8::坤) => SharedString::new_static("剥"),
-            (Gua8::坤, Gua8::震) => SharedString::new_static("复"),
-            (Gua8::乾, Gua8::震) => SharedString::new_static("无妄"),
-            (Gua8::艮, Gua8::乾) => SharedString::new_static("大畜"),
-            (Gua8::艮, Gua8::震) => SharedString::new_static("颐"),
-            (Gua8::兑, Gua8::巽) => SharedString::new_static("大过"),
-            (Gua8::坎, Gua8::坎) => SharedString::new_static("坎"),
-            (Gua8::离, Gua8::离) => SharedString::new_static("离"),
-            (Gua8::兑, Gua8::艮) => SharedString::new_static("咸"),
-            (Gua8::震, Gua8::巽) => SharedString::new_static("恒"),
-            (Gua8::乾, Gua8::艮) => SharedString::new_static("遯"),
-            (Gua8::震, Gua8::乾) => SharedString::new_static("大壮"),
-            (Gua8::离, Gua8::坤) => SharedString::new_static("晋"),
-            (Gua8::坤, Gua8::离) => SharedString::new_static("明夷"),
-            (Gua8::巽, Gua8::离) => SharedString::new_static("家人"),
-            (Gua8::离, Gua8::兑) => SharedString::new_static("睽"),
-            (Gua8::坎, Gua8::艮) => SharedString::new_static("蹇"),
-            (Gua8::震, Gua8::坎) => SharedString::new_static("解"),
-            (Gua8::艮, Gua8::兑) => SharedString::new_static("损"),
-            (Gua8::巽, Gua8::震) => SharedString::new_static("益"),
-            (Gua8::兑, Gua8::乾) => SharedString::new_static("夬"),
-            (Gua8::乾, Gua8::巽) => SharedString::new_static("姤"),
-            (Gua8::兑, Gua8::坤) => SharedString::new_static("萃"),
-            (Gua8::坤, Gua8::巽) => SharedString::new_static("升"),
-            (Gua8::兑, Gua8::坎) => SharedString::new_static("困"),
-            (Gua8::坎, Gua8::巽) => SharedString::new_static("井"),
-            (Gua8::兑, Gua8::离) => SharedString::new_static("革"),
-            (Gua8::离, Gua8::巽) => SharedString::new_static("鼎"),
-            (Gua8::震, Gua8::震) => SharedString::new_static("震"),
-            (Gua8::艮, Gua8::艮) => SharedString::new_static("艮"),
-            (Gua8::巽, Gua8::艮) => SharedString::new_static("渐"),
-            (Gua8::震, Gua8::兑) => SharedString::new_static("归妹"),
-            (Gua8::震, Gua8::离) => SharedString::new_static("丰"),
-            (Gua8::离, Gua8::艮) => SharedString::new_static("旅"),
-            (Gua8::巽, Gua8::巽) => SharedString::new_static("巽"),
-            (Gua8::兑, Gua8::兑) => SharedString::new_static("兑"),
-            (Gua8::巽, Gua8::坎) => SharedString::new_static("涣"),
-            (Gua8::坎, Gua8::兑) => SharedString::new_static("节"),
-            (Gua8::巽, Gua8::兑) => SharedString::new_static("中孚"),
-            (Gua8::震, Gua8::艮) => SharedString::new_static("小过"),
-            (Gua8::坎, Gua8::离) => SharedString::new_static("既济"),
-            (Gua8::离, Gua8::坎) => SharedString::new_static("未济"),
+    /// 获得卦象名称
+    pub const fn name(&self) -> &'static str {
+        match (self.shang, self.xia) {
+            (Gua8::乾, Gua8::乾) => "乾",
+            (Gua8::坤, Gua8::坤) => "坤",
+            (Gua8::坎, Gua8::震) => "屯",
+            (Gua8::艮, Gua8::坎) => "蒙",
+            (Gua8::坎, Gua8::乾) => "需",
+            (Gua8::乾, Gua8::坎) => "讼",
+            (Gua8::坤, Gua8::坎) => "师",
+            (Gua8::坎, Gua8::坤) => "比",
+            (Gua8::巽, Gua8::乾) => "小畜",
+            (Gua8::乾, Gua8::兑) => "履",
+            (Gua8::坤, Gua8::乾) => "泰",
+            (Gua8::乾, Gua8::坤) => "否",
+            (Gua8::乾, Gua8::离) => "同人",
+            (Gua8::离, Gua8::乾) => "大有",
+            (Gua8::坤, Gua8::艮) => "谦",
+            (Gua8::震, Gua8::坤) => "豫",
+            (Gua8::兑, Gua8::震) => "随",
+            (Gua8::艮, Gua8::巽) => "蛊",
+            (Gua8::坤, Gua8::兑) => "临",
+            (Gua8::巽, Gua8::坤) => "观",
+            (Gua8::离, Gua8::震) => "噬嗑",
+            (Gua8::艮, Gua8::离) => "贲",
+            (Gua8::艮, Gua8::坤) => "剥",
+            (Gua8::坤, Gua8::震) => "复",
+            (Gua8::乾, Gua8::震) => "无妄",
+            (Gua8::艮, Gua8::乾) => "大畜",
+            (Gua8::艮, Gua8::震) => "颐",
+            (Gua8::兑, Gua8::巽) => "大过",
+            (Gua8::坎, Gua8::坎) => "坎",
+            (Gua8::离, Gua8::离) => "离",
+            (Gua8::兑, Gua8::艮) => "咸",
+            (Gua8::震, Gua8::巽) => "恒",
+            (Gua8::乾, Gua8::艮) => "遯",
+            (Gua8::震, Gua8::乾) => "大壮",
+            (Gua8::离, Gua8::坤) => "晋",
+            (Gua8::坤, Gua8::离) => "明夷",
+            (Gua8::巽, Gua8::离) => "家人",
+            (Gua8::离, Gua8::兑) => "睽",
+            (Gua8::坎, Gua8::艮) => "蹇",
+            (Gua8::震, Gua8::坎) => "解",
+            (Gua8::艮, Gua8::兑) => "损",
+            (Gua8::巽, Gua8::震) => "益",
+            (Gua8::兑, Gua8::乾) => "夬",
+            (Gua8::乾, Gua8::巽) => "姤",
+            (Gua8::兑, Gua8::坤) => "萃",
+            (Gua8::坤, Gua8::巽) => "升",
+            (Gua8::兑, Gua8::坎) => "困",
+            (Gua8::坎, Gua8::巽) => "井",
+            (Gua8::兑, Gua8::离) => "革",
+            (Gua8::离, Gua8::巽) => "鼎",
+            (Gua8::震, Gua8::震) => "震",
+            (Gua8::艮, Gua8::艮) => "艮",
+            (Gua8::巽, Gua8::艮) => "渐",
+            (Gua8::震, Gua8::兑) => "归妹",
+            (Gua8::震, Gua8::离) => "丰",
+            (Gua8::离, Gua8::艮) => "旅",
+            (Gua8::巽, Gua8::巽) => "巽",
+            (Gua8::兑, Gua8::兑) => "兑",
+            (Gua8::巽, Gua8::坎) => "涣",
+            (Gua8::坎, Gua8::兑) => "节",
+            (Gua8::巽, Gua8::兑) => "中孚",
+            (Gua8::震, Gua8::艮) => "小过",
+            (Gua8::坎, Gua8::离) => "既济",
+            (Gua8::离, Gua8::坎) => "未济",
         }
-    }
-
-    /// 获取卦名
-    pub fn name(&self) -> SharedString {
-        self.name.clone()
-    }
-
-    pub fn display(&self) -> SharedString {
-        let shang = self.shang.name();
-        let xia = self.xia.name();
-        let name = self.name.clone();
-
-        let display = format!("{}（上卦：{}，下卦：{}）", name, shang, xia);
-
-        SharedString::new(display)
     }
 
     /// 进行变卦
@@ -382,7 +361,5 @@ impl Gua64 {
             Gua64YaoIndex::Fifth => self.shang.reverse(Gua8YaoIndex::Second),
             Gua64YaoIndex::Sixth => self.shang.reverse(Gua8YaoIndex::Third),
         }
-
-        self.name = Self::parse_name(self.shang, self.xia);
     }
 }
