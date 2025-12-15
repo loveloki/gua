@@ -22,6 +22,10 @@ impl Yao {
         !self.status
     }
 
+    pub fn name(&self) -> &'static str {
+        if self.status { "阳" } else { "阴" }
+    }
+
     /// 翻转
     pub fn reverse(&mut self) {
         self.status = !self.status;

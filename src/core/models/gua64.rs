@@ -363,3 +363,42 @@ impl Gua64 {
         }
     }
 }
+
+pub struct Gua64Iterator {
+    gua: Gua64,
+    index: u8,
+}
+
+impl Iterator for Gua64Iterator {
+    type Item = Yao;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let result = match self.index {
+            0 => Some(self.gua.yao(Gua64YaoIndex::First)),
+            1 => Some(self.gua.yao(Gua64YaoIndex::Second)),
+            2 => Some(self.gua.yao(Gua64YaoIndex::Third)),
+            3 => Some(self.gua.yao(Gua64YaoIndex::Fourth)),
+            4 => Some(self.gua.yao(Gua64YaoIndex::Fifth)),
+            5 => Some(self.gua.yao(Gua64YaoIndex::Sixth)),
+            _ => None,
+        };
+
+        if result.is_some() {
+            self.index += 1;
+        }
+
+        result
+    }
+}
+
+impl IntoIterator for Gua64 {
+    type Item = Yao;
+    type IntoIter = Gua64Iterator;
+
+    fn into_iter(self) -> Self::IntoIter {
+        Gua64Iterator {
+            gua: self,
+            index: 0,
+        }
+    }
+}

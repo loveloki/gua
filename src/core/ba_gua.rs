@@ -1,7 +1,8 @@
 use std::fmt::Debug;
 
 use chrono::{DateTime, Local};
-use gpui::{Context, IntoElement, ParentElement, Render, SharedString, Window, div};
+use gpui::{Context, IntoElement, ParentElement, Render, Window, div};
+use gpui_component::h_flex;
 
 use crate::core::models::{Gua8, Gua64, Gua64YaoIndex};
 use crate::core::utils::ichang_mod;
@@ -83,11 +84,33 @@ impl GuaResult {
             ben_gua, bian_gua, hu_gua, parsed_date
         )
     }
+
+    pub fn ben_gua(&mut self) -> impl IntoElement {
+        let gua = self.ben_gua.clone();
+
+        div()
+            .child("本卦")
+            .child(gua.name())
+            .children(gua.into_iter().map(|yao| div().child(yao.name())))
+    }
+
+    pub fn bian_gua(&mut self) -> impl IntoElement {
+        let gua = self.bian_gua.clone();
+
+        if let Some(gua) = gua {
+            div()
+                .child("变卦")
+                .child(gua.name())
+                .children(gua.into_iter().map(|yao| div().child(yao.name())))
+        } else {
+            div().child("无变卦")
+        }
+    }
 }
 
 impl Render for GuaResult {
     fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
-        div().child(self.display())
+        h_flex().child(self.ben_gua()).child(self.bian_gua())
     }
 }
 
